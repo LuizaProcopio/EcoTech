@@ -57,3 +57,29 @@ Gamificar o descarte de resíduos por meio de **reconhecimento de imagem**, cria
 * Fortalecimento da economia local dentro do campus
 * Desenvolvimento de uma cultura sustentável baseada em incentivo positivo
 
+---
+
+## 🎯 Escopo do Projeto
+
+O **EcoTech** define seus limites de atuação para garantir a viabilidade da solução:
+
+* **Incluso (In-Scope):**
+    * Interface mobile para usuários e lojistas.
+    * Algoritmo de validação de descarte via imagem.
+    * Sistema de carteira de pontos e geração de cupons.
+    * Ranking de engajamento e central de ajuda com IA.
+* **Não Incluso (Out-of-Scope):**
+    * Gestão da coleta física ou venda de resíduos.
+    * Transações monetárias (pagamento via cartão/pix) dentro do app.
+    * Instalação física de lixeiras inteligentes.
+
+---
+
+## 📂 Backlog do Produto (Épicos)
+
+As funcionalidades estão agrupadas em 4 grandes blocos de desenvolvimento:
+
+1.  **EP01 - Gestão de Identidade:** Login, cadastro e segurança.
+2.  **EP02 - Experiência de Descarte:** O coração do app (foto -> validação -> pontos).
+3.  **EP03 - Gamificação e Conteúdo:** Ranking e central educativa.
+4.  **EP04 - Marketplace e Suporte:** Troca de cupons e atendimento ao usuário.
