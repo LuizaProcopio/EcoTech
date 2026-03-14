@@ -83,3 +83,26 @@ As funcionalidades estão agrupadas em 4 grandes blocos de desenvolvimento:
 2.  **EP02 - Experiência de Descarte:** O coração do app (foto -> validação -> pontos).
 3.  **EP03 - Gamificação e Conteúdo:** Ranking e central educativa.
 4.  **EP04 - Marketplace e Suporte:** Troca de cupons e atendimento ao usuário.
+
+---
+
+## 📖 User Stories (Histórias de Usuário)
+### EP01 - Gestão de Identidade
+* US01: Como estudante, eu quero criar uma conta com e-mail e senha para que eu possa salvar meu histórico de pontos e resgates.
+* US02: Como usuário registrado, eu quero recuperar minha senha via e-mail para que eu consiga acessar minha conta caso eu a esqueça.
+* US03: Como usuário, eu quero editar meu perfil (foto e nome) para que minha identificação no ranking seja personalizada.
+
+### EP02 - Experiência de Descarte
+* US04: Como usuário, eu quero registrar meu descarte através de uma foto para que o sistema valide minha ação sustentável.
+* US05: Como aluno consciente, eu quero receber informações educativas sobre o material descartado para que eu aprenda mais sobre reciclagem.
+* US06: Como reciclador, eu quero ganhar Eco Pontos automaticamente após o descarte para que eu possa acumulá-los e trocar por benefícios.
+
+### EP03 - Gamificação e Conteúdo
+* US07: Como competidor, eu quero visualizar minha posição no ranking da universidade para que eu possa me engajar com a comunidade e ver meu impacto.
+* US08: Como estudante, eu quero acessar uma central de conteúdos educativos para que eu entenda a importância do descarte correto no campus.
+
+### EP04 - Marketplace e Suporte
+* US09: Como estudante, eu quero ver uma lista de barracas parceiras e seus descontos para que eu saiba onde posso utilizar meus pontos.
+* US10: Como consumidor, eu quero trocar meus pontos por um código de desconto para que eu economize na compra de lanches na universidade.
+* US11: Como usuário com dúvidas, eu quero conversar com um chatbot de IA para que eu tenha suporte imediato sobre o uso do app.
+* US12: Como usuário, eu quero enviar mensagens diretamente para o suporte técnico para que eu possa relatar problemas complexos ou falhas no registro.
