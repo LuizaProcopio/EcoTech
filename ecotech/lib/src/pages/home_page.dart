@@ -1,9 +1,15 @@
 import 'package:ecotech/src/widgets/button_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:ecotech/src/pages/login_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +67,12 @@ class HomePage extends StatelessWidget {
             // Botão de login
             ButtonWidget(
               texto: "LOGIN",
-              onClik: () {},
+              onClik: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  );
+              },
             ),
           ],
         ),
