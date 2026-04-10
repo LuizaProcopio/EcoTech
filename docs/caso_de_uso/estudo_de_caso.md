@@ -363,7 +363,6 @@ Permitir que o usuário atualize suas informações pessoais.
 
 ### RN Relacionadas
 - Nenhuma
-<img width="237" height="312" alt="image" src="https://github.com/user-attachments/assets/99a87ee4-cf54-4d16-9bdd-f546a8a620d4" />
 
 
 ## UC11 — Navegar no Painel Principal (Home)
@@ -399,6 +398,9 @@ Prover acesso centralizado a todas as funcionalidades do aplicativo (Descarte, R
 ### RN Relacionadas
 - Nenhuma
 
+<img width="408" height="367" alt="image" src="https://github.com/user-attachments/assets/93b9c716-ee2f-4c98-a904-3931695993fd" />
+
+
 ## UC12 — Capturar Imagem para Descarte
 
 ### Ator Principal
@@ -433,6 +435,9 @@ Utilizar a câmera do dispositivo para fotografar o resíduo e iniciar o process
 
 ### RN Relacionadas
 - RN03
+
+<img width="409" height="500" alt="image" src="https://github.com/user-attachments/assets/3d2d6a95-5744-4229-97dd-58816d96cf92" />
+
 
 ## UC13 — Validar Descarte e Exibir Conteúdo Educativo
 
@@ -471,6 +476,9 @@ Confirmar a veracidade do descarte e educar o usuário sobre o material identifi
 ### RN Relacionadas
 - RN03, RN04
 
+<img width="514" height="422" alt="image" src="https://github.com/user-attachments/assets/25ef0a20-7113-40df-939f-2c91b5cd678a" />
+
+
 ## UC14 — Listar e Selecionar Recompensas
 
 ### Ator Principal
@@ -503,6 +511,9 @@ Visualizar as opções de cupons disponíveis nos parceiros da universidade.
   
 ### RN Relacionadas
 - Nenhuma
+
+<img width="351" height="367" alt="image" src="https://github.com/user-attachments/assets/e91954b1-aa24-4889-b134-5c1ee1979d66" />
+
 
 ## UC15 — Confirmar Resgate e Gerar Cupom
 
@@ -541,6 +552,8 @@ Finalizar a troca de pontos por um benefício e gerar o código de validação.
 ### RN Relacionadas
 - RN05, RN06, RN07
 
+<img width="388" height="485" alt="image" src="https://github.com/user-attachments/assets/8da9ee9b-cffe-4a4d-813f-779426971ace" />
+
 
 ## UC16 — Visualizar Ranking de Usuários (Leaderboard)
 
@@ -574,6 +587,8 @@ Permitir que o usuário visualize a classificação geral de pontos entre os alu
 
 ### RN Relacionadas
 - RN08
+
+<img width="458" height="312" alt="image" src="https://github.com/user-attachments/assets/ca7dbdc3-23bb-457b-b455-e7bf95fc14c2" />
 
 
 ## UC17 — Consultar Conteúdo Educativo
@@ -609,6 +624,8 @@ Informar o usuário sobre a importância e os métodos corretos de descarte de r
 ### RN Relacionadas
 - Nenhuma.
 
+<img width="469" height="367" alt="image" src="https://github.com/user-attachments/assets/8b4ea59b-9c01-40e2-9c76-773cfeae72d9" />
+
 
 ## UC18 — Interagir com Chatbot de Suporte (IA)
 
@@ -642,6 +659,8 @@ Sanar dúvidas imediatas sobre o uso do aplicativo ou regras de descarte atravé
 
 ### RN Relacionadas
 - Nenhuma.
+
+<img width="429" height="367" alt="image" src="https://github.com/user-attachments/assets/7e8409b8-165f-4cbd-8997-40c90f058f55" />
 
 
 ## UC19 — Enviar E-mail para Suporte Técnico
@@ -677,6 +696,8 @@ Permitir o contato direto com a equipe humana para problemas não resolvidos pel
 ### RN Relacionadas
 - Nenhuma.
 
+<img width="247" height="534" alt="image" src="https://github.com/user-attachments/assets/5866252c-5811-4f05-a6ed-9d00142f2e9a" />
+
 
 ## UC20 — Visualizar e Gerenciar Perfil do Usuário
 
@@ -710,6 +731,9 @@ Visualizar informações da conta e realizar ajustes nas configurações pessoai
 
 ### RN Relacionadas
 - RN10
+
+<img width="295" height="367" alt="image" src="https://github.com/user-attachments/assets/66852457-5ed0-473f-b55b-a6ddcfefbf6b" />
+
 
 ----
 ## Imagens
