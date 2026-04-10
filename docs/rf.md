@@ -49,3 +49,6 @@ O usuário deve ser capaz de alterar sua foto de perfil, nome de exibição e ou
 
 ### RF16 — Alteração de Senha Interna
 O sistema deve permitir que o usuário logado altere sua senha de acesso nas configurações, mediante confirmação da nova senha.
+
+<img width="820" height="601" alt="image" src="https://github.com/user-attachments/assets/0ed5edf6-8226-45dd-9001-6a3282352efb" />
+
