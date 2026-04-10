@@ -364,6 +364,8 @@ Permitir que o usuário atualize suas informações pessoais.
 ### RN Relacionadas
 - Nenhuma
 
+<img width="386" height="367" alt="image" src="https://github.com/user-attachments/assets/f186ca7c-8315-40f7-8bfe-6f20b71b14e8" />
+
 
 ## UC11 — Navegar no Painel Principal (Home)
 
