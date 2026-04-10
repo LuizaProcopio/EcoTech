@@ -34,6 +34,7 @@ Permitir que o usuário acesse o sistema EcoTech.
 
 ### RN Relacionadas
 - RN09
+<img width="346" height="367" alt="image" src="https://github.com/user-attachments/assets/48fc9703-949a-41e8-9f39-eb75b8431749" />
 
 
 ## UC02 — Recuperar Senha
@@ -73,6 +74,7 @@ Permitir que o usuário recupere o acesso à sua conta.
 
 ### RN Relacionadas
 - RN02
+<img width="337" height="477" alt="image" src="https://github.com/user-attachments/assets/1972a9f9-8f49-47be-876e-bc9736bde76c" />
 
 
 ## UC03 — Cadastrar Usuário
@@ -111,7 +113,7 @@ Permitir a criação de uma nova conta no sistema.
 
 ### RN Relacionadas
 - RN01
-
+<img width="340" height="422" alt="image" src="https://github.com/user-attachments/assets/6c9f2078-0009-43ec-8416-2ad2c93f0f78" />
 
 
 ## UC04 — Registrar Descarte de Resíduo
@@ -150,6 +152,7 @@ Registrar o descarte de resíduos recicláveis através de imagem.
 
 ### RN Relacionadas
 - RN03
+<img width="280" height="422" alt="image" src="https://github.com/user-attachments/assets/2fd0d68d-e074-461c-a998-22a7881c8395" />
 
 
 ## UC05 — Receber Feedback Educativo
@@ -183,6 +186,7 @@ Informar o usuário sobre o material descartado.
 
 ### RN Relacionadas
 - Nenhuma
+<img width="411" height="312" alt="image" src="https://github.com/user-attachments/assets/897a5f20-da86-4aea-9018-71c8b06f5fbb" />
 
 
 ## UC06 — Atribuir Eco Pontos
@@ -217,6 +221,7 @@ Creditar pontos ao usuário após descarte validado.
 
 ### RN Relacionadas
 - RN04
+<img width="347" height="367" alt="image" src="https://github.com/user-attachments/assets/efef7a6b-727e-4ff4-a6c1-4c4cc41b8f6c" />
 
 
 ## UC07 — Visualizar Dashboard de Pontuação
@@ -250,6 +255,7 @@ Permitir que o usuário visualize seu saldo de Eco Pontos.
 
 ### RN Relacionadas
 - Nenhuma
+<img width="228" height="312" alt="image" src="https://github.com/user-attachments/assets/ee0878ba-8851-402f-baad-7b86886241f8" />
 
 
 ## UC08 — Resgatar Cupom de Desconto
@@ -289,7 +295,7 @@ Permitir a troca de Eco Pontos por recompensas.
 ### RN Relacionadas
 - RN05
 - RN06
-
+<img width="310" height="422" alt="image" src="https://github.com/user-attachments/assets/40f6e1b3-8f06-4308-ab8e-b684ab63a5c7" />
 
 ## UC09 — Visualizar Ranking de Usuários
 
@@ -323,7 +329,7 @@ Comparar pontuação com outros usuários.
 
 ### RN Relacionadas
 - RN08
-
+<img width="237" height="312" alt="image" src="https://github.com/user-attachments/assets/aabc65c3-b246-4fe6-b7a0-9fb038a7dc55" />
 
 ## UC10 — Editar Perfil
 
@@ -357,7 +363,6 @@ Permitir que o usuário atualize suas informações pessoais.
 
 ### RN Relacionadas
 - Nenhuma
-<img width="386" height="367" alt="image" src="https://github.com/user-attachments/assets/f2b87052-e21a-4120-b47d-b1f0dc0b55fa" />
 
 
 ## UC11 — Navegar no Painel Principal (Home)
