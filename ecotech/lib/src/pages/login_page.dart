@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:ecotech/src/viewmodel/login_view_model.dart';
 import 'package:ecotech/src/widgets/campo_formulario_widget.dart';
 import 'package:ecotech/src/widgets/button_app_widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -13,19 +15,39 @@ class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
   final passWordController = TextEditingController();
 
-  void _login() {
-    Navigator.of(context).pushNamed("/login");
+  void _login() async {
+    // pega o ViewModel
+    final viewModel = context.read<LoginViewModel>();
+
+    // chama a API
+    final user = await viewModel.login(
+      emailController.text,
+      passWordController.text,
+    );
+
+    // se o login foi bem sucedido, navega para a próxima tela
+    if (user != null && mounted) {
+      Navigator.of(context).pushNamed("/");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Bem vindo, ${user.userName}!"),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // observa o ViewModel para reagir a mudanças
+    final viewModel = context.watch<LoginViewModel>();
+
     return Scaffold(
-      // 1. AppBar roxa com título "EcoTech"
-      appBar: AppBar( // Local onde fica a seta "voltar" <-
-        backgroundColor: Color(0xFF6A0DAD), // Fundo de tela roxo
+      appBar: AppBar(
+        backgroundColor: Color(0xFF6A0DAD),
         iconTheme: IconThemeData(color: Colors.white),
-        title: Text( 
-          "EcoTech", // Nome do aplicativo
+        title: Text(
+          "EcoTech",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -44,7 +66,6 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 SizedBox(height: 10),
 
-                // 2. Texto "Bem Vindo!"
                 Text(
                   "Bem Vindo!",
                   style: TextStyle(
@@ -57,7 +78,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 10),
 
                 Image.asset(
-                  "assets/images/img_lixo_login.png", // Imagem do lixo
+                  "assets/images/img_lixo_login.png",
                   height: 200,
                 ),
 
@@ -67,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                   label: "E-MAIL",
                   controller: emailController,
                   obscure: false,
-                  icon: Icons.email, // icone de carta
+                  icon: Icons.email,
                 ),
 
                 SizedBox(height: 15),
@@ -75,16 +96,14 @@ class _LoginPageState extends State<LoginPage> {
                 CampoFormularioWidget(
                   label: "SENHA",
                   controller: passWordController,
-                  obscure: true, // icone de acadeado
+                  obscure: true,
                   icon: Icons.lock,
                 ),
 
-                // 3. "esqueci minha senha" alinhado à direita
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
                     onPressed: () {
-                      // TODO: navegar para recuperação de senha
                       Navigator.of(context).pushNamed("/forgotPassword");
                     },
                     child: Text(
@@ -99,12 +118,28 @@ class _LoginPageState extends State<LoginPage> {
 
                 SizedBox(height: 10),
 
-                // botão importado /src/widgets/button_app_widgets.dart
-                ButtonAppWidget(onclick: _login, title: "ENTRAR"),
+                // mostra loading enquanto aguarda a API
+                viewModel.isLoading
+                    ? Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)))
+                    : ButtonAppWidget(onclick: _login, title: "ENTRAR"),
+
+                SizedBox(height: 15),
+
+                // mostra erro da API se houver
+                Visibility(
+                  visible: viewModel.erroMessage != null,
+                  child: Text(
+                    viewModel.erroMessage ?? '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
 
                 SizedBox(height: 20),
 
-                // 4. "Não tem conta? Cadastre-se" no rodapé
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -114,8 +149,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // TODO: navegar para cadastro
-
                         Navigator.of(context).pushNamed("/createAccount");
                       },
                       child: Text(

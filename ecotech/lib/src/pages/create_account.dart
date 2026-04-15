@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
+import 'package:ecotech/src/viewmodel/cadastro_view_model.dart';
 import 'package:ecotech/src/widgets/campo_formulario_widget.dart';
 import 'package:ecotech/src/widgets/button_app_widgets.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateAccountPage extends StatefulWidget {
   const CreateAccountPage({super.key});
@@ -10,47 +12,57 @@ class CreateAccountPage extends StatefulWidget {
 }
 
 class _CreateAccountState extends State<CreateAccountPage> {
+  final personController = TextEditingController();
   final emailController = TextEditingController();
   final passWordController = TextEditingController();
-  final personController = TextEditingController();
 
-  void _createAccount() {
-    // verificação se os campos estiverem vazios, exibe um aviso e não deixa avançar
-    if (personController.text.isEmpty || 
-        emailController.text.isEmpty || 
+  void _createAccount() async {
+    // validação dos campos antes de chamar a API
+    if (personController.text.isEmpty ||
+        emailController.text.isEmpty ||
         passWordController.text.isEmpty) {
-      
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text("Por favor, preencha todos os campos!"), // mensagem de erro de informações
+          content: Text("Por favor, preencha todos os campos!"),
           backgroundColor: Colors.redAccent,
         ),
       );
-      return; // Para a execução aqui
+      return;
     }
 
-    // se os campos estão preenchidos.
-    // o comando 'pop' remove a tela de cadastro e volta para a tela de login que estava atrás.
-    Navigator.of(context).pop();
+    // pega o ViewModel
+    final viewModel = context.read<CadastroViewModel>();
 
-    // mostra uma mensagem de sucesso na tela de login
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text("Conta criada com sucesso!"),
-        backgroundColor: Colors.green,
-      ),
+    // chama a API
+    final user = await viewModel.cadastro(
+      personController.text,
+      emailController.text,
+      passWordController.text,
     );
+
+    // se o cadastro foi bem sucedido navega para o login
+    if (user != null && mounted) {
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Conta criada com sucesso! Faça seu login."),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    // observa o ViewModel para reagir a mudanças
+    final viewModel = context.watch<CadastroViewModel>();
+
     return Scaffold(
-      // 1. AppBar roxa com título "EcoTech"
-      appBar: AppBar( // Local onde fica a seta "voltar" <-
-        backgroundColor: Color(0xFF6A0DAD), // Fundo de tela roxo
+      appBar: AppBar(
+        backgroundColor: Color(0xFF6A0DAD),
         iconTheme: IconThemeData(color: Colors.white),
-        title: Text( 
-          "EcoTech", // Nome do aplicativo
+        title: Text(
+          "EcoTech",
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -69,7 +81,6 @@ class _CreateAccountState extends State<CreateAccountPage> {
               children: [
                 SizedBox(height: 10),
 
-                // 2. Texto "Bem Vindo!"
                 Text(
                   "Crie sua Conta!",
                   style: TextStyle(
@@ -82,44 +93,61 @@ class _CreateAccountState extends State<CreateAccountPage> {
                 SizedBox(height: 10),
 
                 Image.asset(
-                  "assets/images/img_criacao_senha.png", // Imagem do lixo
+                  "assets/images/img_criacao_senha.png",
                   height: 200,
                 ),
 
                 SizedBox(height: 20),
 
-                CampoFormularioWidget( // local para colocar nome de usuario
+                CampoFormularioWidget(
                   label: "NOME",
                   controller: personController,
                   obscure: false,
-                  icon: Icons.person, // icone de pessoa
+                  icon: Icons.person,
                 ),
 
                 SizedBox(height: 15),
 
-                CampoFormularioWidget( // local para colocar senha de usuario
+                CampoFormularioWidget(
                   label: "E-MAIL",
                   controller: emailController,
                   obscure: false,
-                  icon: Icons.email, // icone de carta
+                  icon: Icons.email,
                 ),
 
                 SizedBox(height: 15),
 
-                CampoFormularioWidget( // local para colocar senha de usuario
+                CampoFormularioWidget(
                   label: "SENHA",
                   controller: passWordController,
-                  obscure: true, // icone de acadeado
+                  obscure: true,
                   icon: Icons.lock,
                 ),
 
-                SizedBox(height: 10),
+                SizedBox(height: 15),
 
-                // botão importado /src/widgets/button_app_widgets.dart
-                ButtonAppWidget(
-                  onclick: _createAccount, 
-                  title: "CADASTRAR",
+                // mostra loading enquanto aguarda a API
+                viewModel.isLoading
+                    ? Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)))
+                    : ButtonAppWidget(
+                        onclick: _createAccount,
+                        title: "CADASTRAR",
+                      ),
+
+                SizedBox(height: 15),
+
+                // mostra erro da API se houver
+                Visibility(
+                  visible: viewModel.erroMessage != null,
+                  child: Text(
+                    viewModel.erroMessage ?? '',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.redAccent,
+                      fontSize: 14,
+                    ),
                   ),
+                ),
 
                 SizedBox(height: 20),
               ],
