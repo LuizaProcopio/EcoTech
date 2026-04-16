@@ -15,15 +15,28 @@ class _CreateAccountState extends State<CreateAccountPage> {
   final personController = TextEditingController();
   final emailController = TextEditingController();
   final passWordController = TextEditingController();
+  final confirmPassWordController = TextEditingController(); // ← novo
 
   void _createAccount() async {
     // validação dos campos antes de chamar a API
     if (personController.text.isEmpty ||
         emailController.text.isEmpty ||
-        passWordController.text.isEmpty) {
+        passWordController.text.isEmpty ||
+        confirmPassWordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Por favor, preencha todos os campos!"),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      return;
+    }
+
+    // validação se as senhas são iguais
+    if (passWordController.text != confirmPassWordController.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("As senhas não coincidem!"),
           backgroundColor: Colors.redAccent,
         ),
       );
@@ -54,7 +67,6 @@ class _CreateAccountState extends State<CreateAccountPage> {
 
   @override
   Widget build(BuildContext context) {
-    // observa o ViewModel para reagir a mudanças
     final viewModel = context.watch<CadastroViewModel>();
 
     return Scaffold(
@@ -126,7 +138,16 @@ class _CreateAccountState extends State<CreateAccountPage> {
 
                 SizedBox(height: 15),
 
-                // mostra loading enquanto aguarda a API
+                // ← campo novo de confirmar senha
+                CampoFormularioWidget(
+                  label: "CONFIRMAR SENHA",
+                  controller: confirmPassWordController,
+                  obscure: true,
+                  icon: Icons.lock_outline,
+                ),
+
+                SizedBox(height: 15),
+
                 viewModel.isLoading
                     ? Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)))
                     : ButtonAppWidget(
@@ -136,7 +157,6 @@ class _CreateAccountState extends State<CreateAccountPage> {
 
                 SizedBox(height: 15),
 
-                // mostra erro da API se houver
                 Visibility(
                   visible: viewModel.erroMessage != null,
                   child: Text(
