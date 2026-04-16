@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class AuthService {
   // endereço da API
   // 10.0.2.2 é o localhost do computador visto pelo emulador Android
-  final String baseUrl = "http://localhost:3000";
+  final String baseUrl = "https://ecotechapi-production.up.railway.app";
 
   // --------------------------------------------------------
   // LOGIN
