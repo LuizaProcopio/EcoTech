@@ -5,6 +5,10 @@ import 'package:ecotech/src/viewmodel/login_view_model.dart';
 import 'package:ecotech/src/viewmodel/cadastro_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:ecotech/src/pages/user_page.dart';
+import 'package:ecotech/src/pages/disposal_registration_page.dart';
+import 'package:ecotech/src/pages/forgot_password.dart';
+import 'package:ecotech/src/pages/password_code.dart';
 
 class AppEcotech extends StatelessWidget {
   const AppEcotech({super.key});
@@ -25,6 +29,11 @@ class AppEcotech extends StatelessWidget {
           "/": (_) => HomePage(),
           "/login": (_) => LoginPage(),
           "/createAccount": (_) => CreateAccountPage(),
+          "/userPage": (_) => UserPage(),
+          "/disposalRegistration": (_) => DisposalRegistrationPage(),
+          "/forgotPassword": (_) => ForgotPasswordPage(),
+          "/passwordCode": (_) => PasswordCodePage(),
+
         },
       ),
     );

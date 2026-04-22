@@ -27,7 +27,7 @@ class _LoginPageState extends State<LoginPage> {
 
     // se o login foi bem sucedido, navega para a próxima tela
     if (user != null && mounted) {
-      Navigator.of(context).pushNamed("/");
+      Navigator.of(context).pushNamed("/userPage");
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Bem vindo, ${user.userName}!"),
