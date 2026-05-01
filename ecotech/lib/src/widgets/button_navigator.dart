@@ -27,7 +27,7 @@ class ButtonNavigator extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 28, horizontal: 12),
           decoration: BoxDecoration(
             border: Border.all(
-              color: Colors.black.withOpacity(0.08),
+              color: const Color.fromARGB(255, 0, 0, 0),
               width: 0.5,
             ),
             borderRadius: BorderRadius.circular(14),
