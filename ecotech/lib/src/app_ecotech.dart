@@ -1,14 +1,19 @@
 import 'package:ecotech/src/pages/login_page.dart';
 import 'package:ecotech/src/pages/home_page.dart';
 import 'package:ecotech/src/pages/create_account.dart';
+import 'package:ecotech/src/pages/forgot_password_page.dart';
+import 'package:ecotech/src/pages/verify_code_page.dart';
+import 'package:ecotech/src/pages/new_password_page.dart';
+import 'package:ecotech/src/pages/password_changed_page.dart';
 import 'package:ecotech/src/viewmodel/login_view_model.dart';
 import 'package:ecotech/src/viewmodel/cadastro_view_model.dart';
+import 'package:ecotech/src/viewmodel/forgot_password_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:ecotech/src/pages/user_page.dart';
 import 'package:ecotech/src/pages/disposal_registration_page.dart';
-import 'package:ecotech/src/pages/forgot_password.dart';
-import 'package:ecotech/src/pages/password_code.dart';
+import 'package:ecotech/src/pages/about_page.dart';
+import 'package:ecotech/src/pages/ranking_page.dart';
 
 class AppEcotech extends StatelessWidget {
   const AppEcotech({super.key});
@@ -17,10 +22,9 @@ class AppEcotech extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        // registra o ViewModel de login
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
-        // registra o ViewModel de cadastro
         ChangeNotifierProvider(create: (_) => CadastroViewModel()),
+        ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -32,8 +36,11 @@ class AppEcotech extends StatelessWidget {
           "/userPage": (_) => UserPage(),
           "/disposalRegistration": (_) => DisposalRegistrationPage(),
           "/forgotPassword": (_) => ForgotPasswordPage(),
-          "/passwordCode": (_) => PasswordCodePage(),
-
+          "/verifyCode": (_) => VerifyCodePage(),
+          "/newPassword": (_) => NewPasswordPage(),
+          "/aboutPage": (_) => AboutPage(),
+          "/passwordChanged": (_) => PasswordChangedPage(),
+          "/rankingPage": (_) => RankingPage(),
         },
       ),
     );
