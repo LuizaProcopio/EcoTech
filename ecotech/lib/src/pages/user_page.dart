@@ -166,7 +166,7 @@ class UserPage extends StatelessWidget {
                 label: 'Registrar\nDescarte',
                 icon: Icons.inbox_outlined,
                 onTap: () {
-                  Navigator.of(context).pushNamed("/disposalRegistrationPage");
+                  Navigator.of(context).pushNamed("/disposalRegistration");
                 },
               ),
             ),
