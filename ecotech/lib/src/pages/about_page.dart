@@ -149,15 +149,16 @@ class AboutPage extends StatelessWidget {
                   const SizedBox(height: 2),
                   Text(
                     tipo['subtitulo'] as String,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Colors.black45,
-                    ),
+                    style: const TextStyle(fontSize: 12, color: Colors.black45),
                   ),
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.black26),
+            const Icon(
+              Icons.arrow_forward_ios,
+              size: 14,
+              color: Colors.black26,
+            ),
           ],
         ),
       ),
@@ -229,8 +230,14 @@ class AboutPage extends StatelessWidget {
 
                     _buildInfo('Exemplos', tipo['exemplos'] as String),
                     _buildInfo('Como descartar', tipo['descarte'] as String),
-                    _buildInfo('Tempo de degradação', tipo['degradacao'] as String),
-                    _buildInfo('Impacto se descartado errado', tipo['impacto'] as String),
+                    _buildInfo(
+                      'Tempo de degradação',
+                      tipo['degradacao'] as String,
+                    ),
+                    _buildInfo(
+                      'Impacto se descartado errado',
+                      tipo['impacto'] as String,
+                    ),
                     _buildInfo('Curiosidade', tipo['curiosidade'] as String),
                   ],
                 ),
@@ -278,11 +285,15 @@ const List<Map<String, dynamic>> _tiposLixo = [
     'subtitulo': 'Garrafas, embalagens, sacolas',
     'icone': Icons.local_drink_outlined,
     'cor': Color(0xFF2196F3),
-    'exemplos': 'Garrafas PET, sacolas, embalagens, copos descartáveis, tampas.',
-    'descarte': 'Descarte na lixeira AZUL de coleta seletiva. Limpe as embalagens antes de descartar.',
+    'exemplos':
+        'Garrafas PET, sacolas, embalagens, copos descartáveis, tampas.',
+    'descarte':
+        'Descarte na lixeira AZUL de coleta seletiva. Limpe as embalagens antes de descartar.',
     'degradacao': 'Entre 100 e 400 anos dependendo do tipo de plástico.',
-    'impacto': 'Contamina rios e oceanos, mata animais marinhos e entra na cadeia alimentar humana.',
-    'curiosidade': 'O Brasil produz mais de 11 milhões de toneladas de plástico por ano, mas recicla menos de 2%.',
+    'impacto':
+        'Contamina rios e oceanos, mata animais marinhos e entra na cadeia alimentar humana.',
+    'curiosidade':
+        'O Brasil produz mais de 11 milhões de toneladas de plástico por ano, mas recicla menos de 2%.',
   },
   {
     'nome': 'Vidro',
@@ -290,43 +301,58 @@ const List<Map<String, dynamic>> _tiposLixo = [
     'icone': Icons.wine_bar_outlined,
     'cor': Color(0xFF4CAF50),
     'exemplos': 'Garrafas de bebidas, potes de conserva, frascos de perfume.',
-    'descarte': 'Descarte na lixeira VERDE de coleta seletiva. Não misture com espelhos ou vidros de janela.',
+    'descarte':
+        'Descarte na lixeira VERDE de coleta seletiva. Não misture com espelhos ou vidros de janela.',
     'degradacao': 'O vidro demora mais de 1 milhão de anos para se decompor.',
-    'impacto': 'Vidros quebrados podem ferir pessoas e animais. Não reciclados, ocupam espaço por milênios.',
-    'curiosidade': 'O vidro pode ser reciclado infinitas vezes sem perder qualidade.',
+    'impacto':
+        'Vidros quebrados podem ferir pessoas e animais. Não reciclados, ocupam espaço por milênios.',
+    'curiosidade':
+        'O vidro pode ser reciclado infinitas vezes sem perder qualidade.',
   },
   {
     'nome': 'Metal / Lata',
     'subtitulo': 'Latinhas, latas de alimento',
     'icone': Icons.kitchen_outlined,
     'cor': Color(0xFFFF9800),
-    'exemplos': 'Latas de refrigerante, cerveja, latas de alimentos, tampas metálicas.',
-    'descarte': 'Descarte na lixeira AMARELA de coleta seletiva. Amasse as latas para economizar espaço.',
+    'exemplos':
+        'Latas de refrigerante, cerveja, latas de alimentos, tampas metálicas.',
+    'descarte':
+        'Descarte na lixeira AMARELA de coleta seletiva. Amasse as latas para economizar espaço.',
     'degradacao': 'Uma lata de alumínio leva até 200 anos para se decompor.',
-    'impacto': 'O alumínio jogado no meio ambiente libera substâncias tóxicas no solo.',
-    'curiosidade': 'Reciclar uma lata de alumínio economiza energia suficiente para deixar uma TV ligada por 3 horas.',
+    'impacto':
+        'O alumínio jogado no meio ambiente libera substâncias tóxicas no solo.',
+    'curiosidade':
+        'Reciclar uma lata de alumínio economiza energia suficiente para deixar uma TV ligada por 3 horas.',
   },
   {
     'nome': 'Papel e Papelão',
     'subtitulo': 'Jornais, caixas, revistas',
     'icone': Icons.newspaper_outlined,
     'cor': Color(0xFF795548),
-    'exemplos': 'Jornais, revistas, caixas de papelão, folhas de papel, cadernos.',
-    'descarte': 'Descarte na lixeira VERMELHA de coleta seletiva. Mantenha o papel seco e limpo.',
+    'exemplos':
+        'Jornais, revistas, caixas de papelão, folhas de papel, cadernos.',
+    'descarte':
+        'Descarte na lixeira VERMELHA de coleta seletiva. Mantenha o papel seco e limpo.',
     'degradacao': 'O papel pode levar de 3 meses a 6 meses para se decompor.',
-    'impacto': 'Papel molhado ou sujo de gordura não pode ser reciclado e vai para aterros.',
-    'curiosidade': 'Reciclar 1 tonelada de papel salva 20 árvores e economiza 100 litros de água.',
+    'impacto':
+        'Papel molhado ou sujo de gordura não pode ser reciclado e vai para aterros.',
+    'curiosidade':
+        'Reciclar 1 tonelada de papel salva 20 árvores e economiza 100 litros de água.',
   },
   {
     'nome': 'Orgânico',
     'subtitulo': 'Restos de comida, cascas',
     'icone': Icons.eco_outlined,
     'cor': Color(0xFF8BC34A),
-    'exemplos': 'Cascas de frutas e legumes, restos de comida, borra de café, folhas.',
-    'descarte': 'Descarte na lixeira MARROM ou orgânica. Pode ser usado para compostagem.',
+    'exemplos':
+        'Cascas de frutas e legumes, restos de comida, borra de café, folhas.',
+    'descarte':
+        'Descarte na lixeira MARROM ou orgânica. Pode ser usado para compostagem.',
     'degradacao': 'Entre 1 semana e 6 meses dependendo do material.',
-    'impacto': 'Quando misturado ao lixo seco, dificulta a reciclagem e gera gases de efeito estufa.',
-    'curiosidade': 'O lixo orgânico representa quase 50% do lixo doméstico brasileiro e pode virar adubo.',
+    'impacto':
+        'Quando misturado ao lixo seco, dificulta a reciclagem e gera gases de efeito estufa.',
+    'curiosidade':
+        'O lixo orgânico representa quase 50% do lixo doméstico brasileiro e pode virar adubo.',
   },
   {
     'nome': 'Eletrônico',
@@ -334,20 +360,29 @@ const List<Map<String, dynamic>> _tiposLixo = [
     'icone': Icons.devices_outlined,
     'cor': Color(0xFF9C27B0),
     'exemplos': 'Celulares, computadores, pilhas, baterias, carregadores, TVs.',
-    'descarte': 'Leve a pontos de coleta específicos em lojas, supermercados ou ecopontos. NUNCA jogue no lixo comum.',
-    'degradacao': 'Componentes eletrônicos podem levar centenas de anos para se decompor.',
-    'impacto': 'Contém metais pesados como chumbo e mercúrio que contaminam o solo e a água.',
-    'curiosidade': 'O Brasil é o 5° maior gerador de lixo eletrônico do mundo, produzindo 2,1 milhões de toneladas por ano.',
+    'descarte':
+        'Leve a pontos de coleta específicos em lojas, supermercados ou ecopontos. NUNCA jogue no lixo comum.',
+    'degradacao':
+        'Componentes eletrônicos podem levar centenas de anos para se decompor.',
+    'impacto':
+        'Contém metais pesados como chumbo e mercúrio que contaminam o solo e a água.',
+    'curiosidade':
+        'O Brasil é o 5° maior gerador de lixo eletrônico do mundo, produzindo 2,1 milhões de toneladas por ano.',
   },
   {
     'nome': 'Perigoso',
     'subtitulo': 'Produtos químicos, remédios',
     'icone': Icons.warning_amber_outlined,
     'cor': Color(0xFFF44336),
-    'exemplos': 'Tintas, solventes, remédios vencidos, pesticidas, pilhas alcalinas.',
-    'descarte': 'Leve a farmácias, postos de saúde ou ecopontos especializados. NUNCA jogue no esgoto ou lixo comum.',
-    'degradacao': 'Varia muito, mas os compostos químicos podem persistir por décadas.',
-    'impacto': 'Contamina mananciais de água potável e pode causar doenças graves em humanos e animais.',
-    'curiosidade': 'Jogar remédios no vaso sanitário é crime ambiental no Brasil.',
+    'exemplos':
+        'Tintas, solventes, remédios vencidos, pesticidas, pilhas alcalinas.',
+    'descarte':
+        'Leve a farmácias, postos de saúde ou ecopontos especializados. NUNCA jogue no esgoto ou lixo comum.',
+    'degradacao':
+        'Varia muito, mas os compostos químicos podem persistir por décadas.',
+    'impacto':
+        'Contamina mananciais de água potável e pode causar doenças graves em humanos e animais.',
+    'curiosidade':
+        'Jogar remédios no vaso sanitário é crime ambiental no Brasil.',
   },
 ];
