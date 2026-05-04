@@ -14,6 +14,9 @@ import 'package:ecotech/src/pages/user_page.dart';
 import 'package:ecotech/src/pages/disposal_registration_page.dart';
 import 'package:ecotech/src/pages/about_page.dart';
 import 'package:ecotech/src/pages/ranking_page.dart';
+import 'package:ecotech/src/pages/profile_page.dart';
+import 'package:ecotech/src/pages/alter_password_page.dart';
+import 'package:ecotech/src/pages/recompensas_page.dart';
 
 class AppEcotech extends StatelessWidget {
   const AppEcotech({super.key});
@@ -41,6 +44,9 @@ class AppEcotech extends StatelessWidget {
           "/aboutPage": (_) => AboutPage(),
           "/passwordChanged": (_) => PasswordChangedPage(),
           "/rankingPage": (_) => RankingPage(),
+          "/profilePage": (_) => ProfilePage(),
+          "/alterPasswordPage": (_) => AlterPasswordPage(),
+          "/recompensasPage": (_) => RecompensasPage(),
         },
       ),
     );
