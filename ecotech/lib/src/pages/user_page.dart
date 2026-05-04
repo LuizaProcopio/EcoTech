@@ -1,57 +1,81 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../models/user_model.dart';
+import '../services/user_service.dart';
 import 'package:ecotech/src/widgets/button_navigator.dart';
-
-class UserModel {
-  final String name;
-  final int points;
-  final String? avatarUrl;
-
-  const UserModel({
-    required this.name,
-    required this.points,
-    this.avatarUrl,
-  });
-
-  String get initials {
-    final parts = name.trim().split(' ');
-    if (parts.length >= 2) {
-      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
-    }
-    return parts[0].substring(0, 2).toUpperCase();
-  }
-}
-
-// ─── Tela principal ──────────────────────────────────────────────────────────
 
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
 
-  // Teste de nome de usuario e pontuação
-  final UserModel _user = const UserModel(
-    name: 'Ana Maria',
-    points: 50,
-    avatarUrl: null,
-  );
-
   @override
   Widget build(BuildContext context) {
+    final int userId = ModalRoute.of(context)!.settings.arguments as int;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F2),
-      body: SafeArea(
-        child: Column(
+      body: FutureBuilder<UserModel?>(
+        future: UserService.getUser(userId),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (!snapshot.hasData || snapshot.data == null) {
+            return const Center(child: Text("Erro ao carregar usuário"));
+          }
+
+          final user = snapshot.data!;
+
+          return SafeArea(
+            child: Column(
+              children: [
+                _buildTopBar(context, user),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        _buildPointsCard(user),
+                        const SizedBox(height: 16),
+                        _buildNavigationGrid(context, userId),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildTopBar(BuildContext context, UserModel user) {
+    return GestureDetector(
+      onTap: () => Navigator.of(context).pushNamed(
+        "/profilePage",
+        arguments: user,
+      ),
+      child: Container(
+        color: const Color(0xFF6A0DAD),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+        child: Row(
           children: [
-            _buildTopBar(),
+            _buildAvatar(user),
+            const SizedBox(width: 12),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  children: [
-                    _buildPointsCard(),
-                    const SizedBox(height: 16),
-                    _buildNavigationGrid(context),
-                  ],
+              child: Text(
+                'Olá, ${user.userName}',
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
+            ),
+            IconButton(
+              icon: const Icon(Icons.notifications_outlined, color: Colors.white),
+              onPressed: () {},
             ),
           ],
         ),
@@ -59,47 +83,24 @@ class UserPage extends StatelessWidget {
     );
   }
 
-  // ── Cabeçalho ─────────────────────────────────────────────────────────────
-
-  Widget _buildTopBar() {
-    return Container(
-      color: Color(0xFF6A0DAD),
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-      child: Row(
-        children: [
-          _buildAvatar(),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              'Olá, ${_user.name}',
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.notifications_outlined, color: Colors.white, size: 24),
-            onPressed: () {},
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildAvatar() {
-    if (_user.avatarUrl != null) {
+  Widget _buildAvatar(UserModel user) {
+    // se tiver foto mostra a foto, senao mostra as iniciais
+    if (user.fotoPerfil != null && user.fotoPerfil!.isNotEmpty) {
       return CircleAvatar(
         radius: 22,
-        backgroundImage: NetworkImage(_user.avatarUrl!),
+        backgroundImage: MemoryImage(base64Decode(user.fotoPerfil!)),
       );
     }
+
+    final initials = user.userName.contains(" ")
+        ? "${user.userName.split(' ')[0][0]}${user.userName.split(' ')[1][0]}".toUpperCase()
+        : user.userName.substring(0, 2).toUpperCase();
+
     return CircleAvatar(
       radius: 22,
       backgroundColor: const Color(0xFFC0B4F0),
       child: Text(
-        _user.initials,
+        initials,
         style: const TextStyle(
           color: Color(0xFF3C3489),
           fontWeight: FontWeight.w600,
@@ -109,14 +110,12 @@ class UserPage extends StatelessWidget {
     );
   }
 
-  // ── Card de pontuação ─────────────────────────────────────────────────────
-
-  Widget _buildPointsCard() {
+  Widget _buildPointsCard(UserModel user) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       decoration: BoxDecoration(
-        color: Color(0xFF6A0DAD),
+        color: const Color(0xFF6A0DAD),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -131,7 +130,7 @@ class UserPage extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '${_user.points} pts',
+            '${user.points} pts',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 38,
@@ -154,9 +153,7 @@ class UserPage extends StatelessWidget {
     );
   }
 
-  // ── Grade de navegação ────────────────────────────────────────────────────
-
-  Widget _buildNavigationGrid(BuildContext context) {
+  Widget _buildNavigationGrid(BuildContext context, int userId) {
     return Column(
       children: [
         Row(
@@ -165,9 +162,7 @@ class UserPage extends StatelessWidget {
               child: ButtonNavigator(
                 label: 'Registrar\nDescarte',
                 icon: Icons.inbox_outlined,
-                onTap: () {
-                  Navigator.of(context).pushNamed("/disposalRegistration");
-                },
+                onTap: () => Navigator.of(context).pushNamed("/disposalRegistration"),
               ),
             ),
             const SizedBox(width: 12),
@@ -175,7 +170,7 @@ class UserPage extends StatelessWidget {
               child: ButtonNavigator(
                 label: 'Recompensas',
                 icon: Icons.card_giftcard_outlined,
-                onTap: () {},
+                onTap: () => Navigator.of(context).pushNamed("/recompensasPage",arguments: userId,),
               ),
             ),
           ],
@@ -187,7 +182,7 @@ class UserPage extends StatelessWidget {
               child: ButtonNavigator(
                 label: 'Ranking',
                 icon: Icons.bar_chart_outlined,
-                onTap: () {},
+                onTap: () => Navigator.of(context).pushNamed("/rankingPage"),
               ),
             ),
             const SizedBox(width: 12),
@@ -195,9 +190,7 @@ class UserPage extends StatelessWidget {
               child: ButtonNavigator(
                 label: 'Sobre',
                 icon: Icons.info_outline,
-                onTap: () {
-                  Navigator.of(context).pushNamed("/aboutPage");
-                },
+                onTap: () => Navigator.of(context).pushNamed("/aboutPage"),
               ),
             ),
           ],

@@ -16,18 +16,18 @@ class _LoginPageState extends State<LoginPage> {
   final passWordController = TextEditingController();
 
   void _login() async {
-    // pega o ViewModel
     final viewModel = context.read<LoginViewModel>();
 
-    // chama a API
     final user = await viewModel.login(
       emailController.text,
       passWordController.text,
     );
 
-    // se o login foi bem sucedido, navega para a próxima tela
     if (user != null && mounted) {
-      Navigator.of(context).pushNamed("/userPage");
+      Navigator.of(context).pushNamed(
+        "/userPage",
+        arguments: viewModel.userId,
+      );
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Bem vindo, ${user.userName}!"),
@@ -39,7 +39,6 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    // observa o ViewModel para reagir a mudanças
     final viewModel = context.watch<LoginViewModel>();
 
     return Scaffold(
@@ -118,14 +117,12 @@ class _LoginPageState extends State<LoginPage> {
 
                 SizedBox(height: 10),
 
-                // mostra loading enquanto aguarda a API
                 viewModel.isLoading
                     ? Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)))
                     : ButtonAppWidget(onclick: _login, title: "ENTRAR"),
 
                 SizedBox(height: 15),
 
-                // mostra erro da API se houver
                 Visibility(
                   visible: viewModel.erroMessage != null,
                   child: Text(
