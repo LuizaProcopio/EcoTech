@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/user_model.dart';
+import 'dart:async';
 
 class UserService {
   static const String baseUrl = "https://ecotechapi-production.up.railway.app";
@@ -22,13 +23,34 @@ class UserService {
   static Future<bool> salvarFoto(int userId, String fotoBase64) async {
     final url = Uri.parse("$baseUrl/usuario/$userId/foto");
 
+    try {
+      final response = await http.put(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({"foto_perfil": fotoBase64}),
+      ).timeout(const Duration(seconds: 30));
+
+      return response.statusCode == 200;
+    } catch (e) {
+      throw Exception("Erro ao enviar foto: $e");
+    }
+  }
+
+  // alterar nome
+  static Future<void> alterarNome(int userId, String novoNome) async {
+    final url = Uri.parse("$baseUrl/usuario/$userId/nome");
+
     final response = await http.put(
       url,
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"foto_perfil": fotoBase64}),
+      body: jsonEncode({"nome": novoNome}),
     );
 
-    return response.statusCode == 200;
+    final data = jsonDecode(response.body);
+
+    if (response.statusCode != 200) {
+      throw Exception(data['message'] ?? 'Erro ao alterar nome');
+    }
   }
 
   // alterar senha
