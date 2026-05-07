@@ -9,13 +9,13 @@ Permitir que o usuário realize acesso ao sistema utilizando e-mail e senha prev
 O sistema deve permitir a solicitação de recuperação de acesso através de um código de verificação enviado por e-mail.
 
 ### RF03 — Cadastro de Usuário
-O sistema deve permitir a criação de novas contas mediante fornecimento de nome, e-mail, senha e aceite dos termos de uso.
+O sistema deve permitir a criação de novas contas mediante fornecimento de nome, e-mail e senha.
 
 ### RF04 — Registro de Descarte por Imagem
 O sistema deve capturar a foto do resíduo descartado para fins de validação e início do processo de pontuação.
 
 ### RF05 — Feedback Educativo
-Após o registro, o sistema deve exibir informações técnicas sobre o material (ex: Plástico BOPP) e dicas de reciclagem.
+Após o registro, o sistema deve exibir informações técnicas sobre o material (ex: Plástico BOPP).
 
 ### RF06 — Atribuição de Eco Pontos
 O sistema deve creditar automaticamente os pontos correspondentes na conta do usuário após a confirmação do descarte.
