@@ -162,7 +162,7 @@ class UserPage extends StatelessWidget {
               child: ButtonNavigator(
                 label: 'Registrar\nDescarte',
                 icon: Icons.inbox_outlined,
-                onTap: () => Navigator.of(context).pushNamed("/disposalRegistration"),
+                onTap: () => Navigator.of(context).pushNamed("/disposalRegistration",arguments: userId,),
               ),
             ),
             const SizedBox(width: 12),
@@ -199,7 +199,7 @@ class UserPage extends StatelessWidget {
         ButtonNavigator(
           label: 'Suporte',
           icon: Icons.chat_bubble_outline,
-          onTap: () {},
+          onTap: () => Navigator.of(context).pushNamed("/suportePage"),
           fullWidth: true,
         ),
       ],

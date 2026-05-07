@@ -301,7 +301,7 @@ class _RecompensasPageState extends State<RecompensasPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: ListView.separated(
                     itemCount: cupons.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 10),
+                    separatorBuilder: (_, _) => const SizedBox(height: 10),
                     itemBuilder: (context, index) {
                       final cupom = cupons[index];
                       return _buildCupomCard(cupom);

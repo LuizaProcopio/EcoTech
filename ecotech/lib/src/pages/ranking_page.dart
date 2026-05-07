@@ -136,7 +136,7 @@ class RankingPage extends StatelessWidget {
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: ListView.separated(
                     itemCount: ranking.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (context, index) {
                       final item = ranking[index];
                       final isTop3 = item.posicao <= 3;
@@ -242,7 +242,7 @@ class RankingPage extends StatelessWidget {
         return const Icon(Icons.emoji_events, color: Color(0xFFCD7F32), size: 24);
       default:
         return Text(
-          '${posicao}',
+          '$posicao',
           textAlign: TextAlign.center,
           style: const TextStyle(
             fontSize: 13,
