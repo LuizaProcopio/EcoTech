@@ -18,6 +18,12 @@ import 'package:ecotech/src/pages/profile_page.dart';
 import 'package:ecotech/src/pages/alter_password_page.dart';
 import 'package:ecotech/src/pages/recompensas_page.dart';
 import 'package:ecotech/src/pages/suporte_page.dart';
+import 'package:ecotech/src/pages/gerenciar_lojas_page.dart';
+import 'package:ecotech/src/pages/verificar_cupom_page.dart';
+import 'package:ecotech/src/pages/perfil_loja_page.dart';
+import 'package:ecotech/src/pages/alterar_email_page.dart';
+import 'package:ecotech/src/pages/login_loja_page.dart';
+import 'package:ecotech/src/pages/cadastrar_loja_page.dart';
 
 class AppEcotech extends StatelessWidget {
   const AppEcotech({super.key});
@@ -49,6 +55,16 @@ class AppEcotech extends StatelessWidget {
           "/alterPasswordPage": (_) => AlterPasswordPage(),
           "/recompensasPage": (_) => RecompensasPage(),
           "/suportePage": (_) => SuportePage(),
+          "/gerenciarLojasPage": (_) => GerenciarLojasPage(),
+          "/verificarCupomPage": (_) => VerificarCupomPage(),
+          "/perfilLojaPage": (_) => PerfilLojaPage(),
+          "/alterarEmailPage": (_) => AlterarEmailPage(),
+          "/loginLojaPage": (_) => const LoginLojaPage(),
+          "/cadastrarLojaPage": (_) => const CadastrarLojaPage(),
+          
+
+
+          
         },
       ),
     );

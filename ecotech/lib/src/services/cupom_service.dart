@@ -3,6 +3,8 @@ import 'package:http/http.dart' as http;
 
 class CupomModel {
   final int idCupom;
+  final int? idLoja;
+  final String? nomeLoja;
   final String titulo;
   final String descricao;
   final double valorDesconto;
@@ -12,6 +14,8 @@ class CupomModel {
 
   CupomModel({
     required this.idCupom,
+    this.idLoja,
+    this.nomeLoja,
     required this.titulo,
     required this.descricao,
     required this.valorDesconto,
@@ -22,17 +26,15 @@ class CupomModel {
 
   factory CupomModel.fromJson(Map<String, dynamic> json) {
     final valorRaw = json['valor_desconto'];
-    final valor = valorRaw is double
-        ? valorRaw
-        : double.tryParse(valorRaw.toString()) ?? 0.0;
+    final valor = valorRaw is double ? valorRaw : double.tryParse(valorRaw.toString()) ?? 0.0;
 
     final pontosRaw = json['pontos_necessarios'];
-    final pontos = pontosRaw is int
-        ? pontosRaw
-        : int.tryParse(pontosRaw.toString()) ?? 0;
+    final pontos = pontosRaw is int ? pontosRaw : int.tryParse(pontosRaw.toString()) ?? 0;
 
     return CupomModel(
       idCupom: json['id_cupom'] ?? 0,
+      idLoja: json['id_loja'],
+      nomeLoja: json['nome_loja'],
       titulo: json['titulo'] ?? '',
       descricao: json['descricao'] ?? '',
       valorDesconto: valor,
@@ -48,7 +50,6 @@ class CupomModel {
 class CupomService {
   static const String baseUrl = "https://ecotechapi-production.up.railway.app";
 
-  // listar cupons com status do usuario
   static Future<List<CupomModel>> listarCupons(int idUsuario) async {
     final url = Uri.parse("$baseUrl/cupons/$idUsuario");
     final response = await http.get(url);
@@ -61,7 +62,6 @@ class CupomService {
     return [];
   }
 
-  // resgatar cupom
   static Future<Map<String, dynamic>> resgatarCupom({
     required int idUsuario,
     required int idCupom,
@@ -71,10 +71,7 @@ class CupomService {
     final response = await http.post(
       url,
       headers: {"Content-Type": "application/json"},
-      body: jsonEncode({
-        "id_usuario": idUsuario,
-        "id_cupom": idCupom,
-      }),
+      body: jsonEncode({"id_usuario": idUsuario, "id_cupom": idCupom}),
     );
 
     final data = jsonDecode(response.body);

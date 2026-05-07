@@ -7,8 +7,6 @@ class LoginViewModel extends ChangeNotifier {
 
   bool isLoading = false;
   String? erroMessage;
-
-  // salva o userId e userName após o login
   int? userId;
   String? userName;
 
@@ -20,11 +18,8 @@ class LoginViewModel extends ChangeNotifier {
     try {
       final response = await _authService.login(email, senha);
       final user = UserModel.fromJson(response);
-
-      // salva o userId e userName do usuário logado
       userId = user.userId;
       userName = user.userName;
-
       return user;
     } catch (e) {
       erroMessage = e.toString().replaceAll('Exception: ', '');

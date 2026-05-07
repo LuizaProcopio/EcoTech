@@ -14,29 +14,29 @@ class UserModel {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
-    // resposta do login
-    if (json.containsKey('userId')) {
+    // resposta do perfil
+    if (json.containsKey('id_usuario')) {
+      final pontosRaw = json['pontos_totais'];
+      final pontos = pontosRaw is int
+          ? pontosRaw
+          : int.tryParse(pontosRaw.toString()) ?? 0;
+
       return UserModel(
-        userId: json['userId'] ?? 0,
-        userName: json['userName'] ?? "Sem nome",
-        email: '',
-        points: 0,
-        fotoPerfil: null,
+        userId: json['id_usuario'] ?? 0,
+        userName: json['nome'] ?? '',
+        email: json['email'] ?? '',
+        points: pontos,
+        fotoPerfil: json['foto_perfil'],
       );
     }
 
-    // resposta do perfil
-    final pontosRaw = json['pontos_totais'];
-    final pontos = pontosRaw is int
-        ? pontosRaw
-        : int.tryParse(pontosRaw.toString()) ?? 0;
-
+    // resposta do login
     return UserModel(
-      userId: json['id_usuario'] ?? 0,
-      userName: json['nome'] ?? "Sem nome",
-      email: json['email'] ?? '',
-      points: pontos,
-      fotoPerfil: json['foto_perfil'],
+      userId: json['userId'] ?? 0,
+      userName: json['userName'] ?? '',
+      email: '',
+      points: 0,
+      fotoPerfil: null,
     );
   }
 }
