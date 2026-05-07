@@ -51,40 +51,27 @@ class UserPage extends StatelessWidget {
   }
 
   Widget _buildTopBar(BuildContext context, UserModel user) {
-    return GestureDetector(
-      onTap: () => Navigator.of(context).pushNamed(
-        "/profilePage",
-        arguments: user,
-      ),
-      child: Container(
-        color: const Color(0xFF6A0DAD),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        child: Row(
-          children: [
-            _buildAvatar(user),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                'Olá, ${user.userName}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-            IconButton(
-              icon: const Icon(Icons.notifications_outlined, color: Colors.white),
-              onPressed: () {},
-            ),
-          ],
-        ),
+    return Container(
+      color: const Color(0xFF6A0DAD),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+      child: Row(
+        children: [
+          _buildAvatar(user),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Text('Olá, ${user.userName}',
+              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500)),
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings_outlined, color: Colors.white),
+            onPressed: () => Navigator.of(context).pushNamed("/profilePage", arguments: user),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildAvatar(UserModel user) {
-    // se tiver foto mostra a foto, senao mostra as iniciais
     if (user.fotoPerfil != null && user.fotoPerfil!.isNotEmpty) {
       return CircleAvatar(
         radius: 22,
@@ -92,21 +79,23 @@ class UserPage extends StatelessWidget {
       );
     }
 
-    final initials = user.userName.contains(" ")
-        ? "${user.userName.split(' ')[0][0]}${user.userName.split(' ')[1][0]}".toUpperCase()
-        : user.userName.substring(0, 2).toUpperCase();
+    String initials = 'U';
+    if (user.userName.isNotEmpty) {
+      final parts = user.userName.trim().split(' ');
+      if (parts.length >= 2) {
+        initials = '${parts[0][0]}${parts[1][0]}'.toUpperCase();
+      } else if (parts[0].length >= 2) {
+        initials = parts[0].substring(0, 2).toUpperCase();
+      } else {
+        initials = parts[0][0].toUpperCase();
+      }
+    }
 
     return CircleAvatar(
       radius: 22,
       backgroundColor: const Color(0xFFC0B4F0),
-      child: Text(
-        initials,
-        style: const TextStyle(
-          color: Color(0xFF3C3489),
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-        ),
-      ),
+      child: Text(initials,
+        style: const TextStyle(color: Color(0xFF3C3489), fontWeight: FontWeight.w600, fontSize: 14)),
     );
   }
 
@@ -120,34 +109,15 @@ class UserPage extends StatelessWidget {
       ),
       child: Column(
         children: [
-          const Text(
-            'Seus Eco Pontos',
-            style: TextStyle(
-              color: Color(0xFFD4C8F7),
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
+          const Text('Seus Eco Pontos',
+            style: TextStyle(color: Color(0xFFD4C8F7), fontSize: 14, fontWeight: FontWeight.w500)),
           const SizedBox(height: 4),
-          Text(
-            '${user.points} pts',
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 38,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          Text('${user.points} pts',
+            style: const TextStyle(color: Colors.white, fontSize: 38, fontWeight: FontWeight.bold)),
           const SizedBox(height: 8),
-          const Text(
-            'CONTINUE DESCARTANDO CORRETAMENTE\nPARA GANHAR RECOMPENSAS!',
+          const Text('CONTINUE DESCARTANDO CORRETAMENTE\nPARA GANHAR RECOMPENSAS!',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: Color(0xFFC0B0F2),
-              fontSize: 10,
-              letterSpacing: 0.5,
-              height: 1.6,
-            ),
-          ),
+            style: TextStyle(color: Color(0xFFC0B0F2), fontSize: 10, letterSpacing: 0.5, height: 1.6)),
         ],
       ),
     );
@@ -162,7 +132,7 @@ class UserPage extends StatelessWidget {
               child: ButtonNavigator(
                 label: 'Registrar\nDescarte',
                 icon: Icons.inbox_outlined,
-                onTap: () => Navigator.of(context).pushNamed("/disposalRegistration",arguments: userId,),
+                onTap: () => Navigator.of(context).pushNamed("/disposalRegistration", arguments: userId),
               ),
             ),
             const SizedBox(width: 12),
@@ -170,7 +140,7 @@ class UserPage extends StatelessWidget {
               child: ButtonNavigator(
                 label: 'Recompensas',
                 icon: Icons.card_giftcard_outlined,
-                onTap: () => Navigator.of(context).pushNamed("/recompensasPage",arguments: userId,),
+                onTap: () => Navigator.of(context).pushNamed("/recompensasPage", arguments: userId),
               ),
             ),
           ],
@@ -196,11 +166,16 @@ class UserPage extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        ButtonNavigator(
-          label: 'Suporte',
-          icon: Icons.chat_bubble_outline,
-          onTap: () => Navigator.of(context).pushNamed("/suportePage"),
-          fullWidth: true,
+        Row(
+          children: [
+            Expanded(
+              child: ButtonNavigator(
+                label: 'Suporte',
+                icon: Icons.chat_bubble_outline,
+                onTap: () => Navigator.of(context).pushNamed("/suportePage"),
+              ),
+            ),
+          ],
         ),
       ],
     );

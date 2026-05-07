@@ -26,8 +26,9 @@ class _LoginPageState extends State<LoginPage> {
     if (user != null && mounted) {
       Navigator.of(context).pushNamed(
         "/userPage",
-        arguments: viewModel.userId,
+        arguments: viewModel.userId!,
       );
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Bem vindo, ${user.userName}!"),
@@ -43,16 +44,10 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF6A0DAD),
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Text(
-          "EcoTech",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
+        backgroundColor: const Color(0xFF6A0DAD),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text("EcoTech",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
         centerTitle: true,
         elevation: 0,
       ),
@@ -63,101 +58,98 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 10),
-
-                Text(
-                  "Bem Vindo!",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF6A0DAD),
-                  ),
-                ),
-
-                SizedBox(height: 10),
-
-                Image.asset(
-                  "assets/images/img_lixo_login.png",
-                  height: 200,
-                ),
-
-                SizedBox(height: 20),
-
+                const SizedBox(height: 10),
+                const Text("Bem Vindo!",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF6A0DAD))),
+                const SizedBox(height: 10),
+                Image.asset("assets/images/img_lixo_login.png", height: 200),
+                const SizedBox(height: 20),
                 CampoFormularioWidget(
                   label: "E-MAIL",
                   controller: emailController,
                   obscure: false,
                   icon: Icons.email,
                 ),
-
-                SizedBox(height: 15),
-
+                const SizedBox(height: 15),
                 CampoFormularioWidget(
                   label: "SENHA",
                   controller: passWordController,
                   obscure: true,
                   icon: Icons.lock,
                 ),
-
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed("/forgotPassword");
-                    },
-                    child: Text(
-                      "esqueci minha senha",
-                      style: TextStyle(
-                        color: Colors.black54,
-                        fontSize: 13,
-                      ),
-                    ),
+                    onPressed: () => Navigator.of(context).pushNamed("/forgotPassword"),
+                    child: const Text("esqueci minha senha",
+                      style: TextStyle(color: Colors.black54, fontSize: 13)),
                   ),
                 ),
-
-                SizedBox(height: 10),
-
+                const SizedBox(height: 10),
                 viewModel.isLoading
-                    ? Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)))
+                    ? const Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)))
                     : ButtonAppWidget(onclick: _login, title: "ENTRAR"),
-
-                SizedBox(height: 15),
-
+                const SizedBox(height: 15),
                 Visibility(
                   visible: viewModel.erroMessage != null,
                   child: Text(
                     viewModel.erroMessage ?? '',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.redAccent,
-                      fontSize: 14,
-                    ),
+                    style: const TextStyle(color: Colors.redAccent, fontSize: 14),
                   ),
                 ),
-
-                SizedBox(height: 20),
-
+                const SizedBox(height: 20),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      "Não tem conta? ",
-                      style: TextStyle(color: Colors.black54),
-                    ),
+                    const Text("Não tem conta? ", style: TextStyle(color: Colors.black54)),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).pushNamed("/createAccount");
-                      },
-                      child: Text(
-                        "Cadastre-se",
-                        style: TextStyle(
-                          color: Color(0xFF6A0DAD),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      onTap: () => Navigator.of(context).pushNamed("/createAccount"),
+                      child: const Text("Cadastre-se",
+                        style: TextStyle(color: Color(0xFF6A0DAD), fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),
+                const SizedBox(height: 20),
+
+                // divisor
+                Row(
+                  children: [
+                    const Expanded(child: Divider()),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Text("ou", style: TextStyle(color: Colors.black38)),
+                    ),
+                    const Expanded(child: Divider()),
+                  ],
+                ),
+                const SizedBox(height: 20),
+
+                // botão lojista
+                GestureDetector(
+                  onTap: () => Navigator.of(context).pushNamed("/loginLojaPage"),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xFF6A0DAD)),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.store_outlined, color: Color(0xFF6A0DAD), size: 20),
+                        SizedBox(width: 8),
+                        Text("ENTRAR COMO LOJISTA",
+                          style: TextStyle(
+                            color: Color(0xFF6A0DAD),
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          )),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
               ],
             ),
           ),

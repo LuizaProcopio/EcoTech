@@ -13,7 +13,7 @@ class _RecompensasPageState extends State<RecompensasPage> {
   late Future<List<CupomModel>> _futureCupons;
   late int _userId;
 
-  // gera código único ECO + 5 caracteres aleatórios (letras e números misturados)
+  // gera código único ECO + 5 caracteres aleatórios
   String _gerarCodigoCupom(int idCupom, int idUsuario) {
     final random = Random(idCupom * 9999 + idUsuario * 1234);
     const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
@@ -29,9 +29,7 @@ class _RecompensasPageState extends State<RecompensasPage> {
   }
 
   void _recarregar() {
-    setState(() {
-      _futureCupons = CupomService.listarCupons(_userId);
-    });
+    setState(() => _futureCupons = CupomService.listarCupons(_userId));
   }
 
   Future<void> _resgatar(CupomModel cupom) async {
@@ -78,12 +76,8 @@ class _RecompensasPageState extends State<RecompensasPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.black12,
-                borderRadius: BorderRadius.circular(2),
-              ),
+              width: 40, height: 4,
+              decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(2)),
             ),
             const SizedBox(height: 20),
             Container(
@@ -96,23 +90,11 @@ class _RecompensasPageState extends State<RecompensasPage> {
                 children: [
                   const Icon(Icons.card_giftcard, color: Color(0xFF6A0DAD), size: 40),
                   const SizedBox(height: 8),
-                  Text(
-                    cupom.titulo,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
+                  Text(cupom.nomeLoja ?? cupom.titulo,
+                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black87)),
                   const SizedBox(height: 4),
-                  Text(
-                    '${cupom.valorDesconto.toStringAsFixed(0)}% de desconto',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Color(0xFF6A0DAD),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  Text('${cupom.valorDesconto.toStringAsFixed(0)}% de desconto',
+                    style: const TextStyle(fontSize: 16, color: Color(0xFF6A0DAD), fontWeight: FontWeight.w500)),
                 ],
               ),
             ),
@@ -126,43 +108,22 @@ class _RecompensasPageState extends State<RecompensasPage> {
               ),
               child: Column(
                 children: [
-                  const Text(
-                    'CUPOM RESGATADO',
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: Colors.black45,
-                      letterSpacing: 1,
-                    ),
-                  ),
+                  const Text('CUPOM RESGATADO',
+                    style: TextStyle(fontSize: 12, color: Colors.black45, letterSpacing: 1)),
                   const SizedBox(height: 4),
-                  Text(
-                    codigo,
-                    style: const TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF6A0DAD),
-                      letterSpacing: 4,
-                    ),
-                  ),
+                  Text(codigo,
+                    style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Color(0xFF6A0DAD), letterSpacing: 4)),
                 ],
               ),
             ),
             const SizedBox(height: 12),
-            const Text(
-              'Apresente este cupom no estabelecimento para obter o desconto.',
+            const Text('Apresente este cupom no estabelecimento para obter o desconto.',
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 13, color: Colors.black54),
-            ),
+              style: TextStyle(fontSize: 13, color: Colors.black54)),
             const SizedBox(height: 8),
-            const Text(
-              'Válido por 2 dias após o resgate.',
+            const Text('Válido por 2 dias após o resgate.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12,
-                color: Colors.redAccent,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
+              style: TextStyle(fontSize: 12, color: Colors.redAccent, fontStyle: FontStyle.italic)),
             const SizedBox(height: 20),
           ],
         ),
@@ -177,118 +138,42 @@ class _RecompensasPageState extends State<RecompensasPage> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF6A0DAD),
         iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          'EcoTech',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
+        title: const Text('EcoTech',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
         centerTitle: true,
         elevation: 0,
       ),
       body: Column(
         children: [
-          // banner topo
           Container(
             width: double.infinity,
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
             decoration: const BoxDecoration(
               color: Color(0xFF6A0DAD),
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(24),
-                bottomRight: Radius.circular(24),
-              ),
+                bottomLeft: Radius.circular(24), bottomRight: Radius.circular(24)),
             ),
             child: const Column(
               children: [
                 Icon(Icons.card_giftcard, color: Colors.amber, size: 40),
                 SizedBox(height: 6),
-                Text(
-                  'Recompensas',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                Text('Recompensas',
+                  style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
                 SizedBox(height: 4),
-                Text(
-                  'Use seus pontos para resgatar cupons!',
-                  style: TextStyle(
-                    color: Color(0xFFD4C8F7),
-                    fontSize: 13,
-                  ),
-                ),
+                Text('Use seus pontos para resgatar cupons!',
+                  style: TextStyle(color: Color(0xFFD4C8F7), fontSize: 13)),
               ],
-            ),
-          ),
-
-          const SizedBox(height: 16),
-
-          // cabeçalho da tabela
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-              decoration: BoxDecoration(
-                color: const Color(0xFF6A0DAD),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: const Row(
-                children: [
-                  Expanded(
-                    flex: 3,
-                    child: Text(
-                      'Nome',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      'Desconto',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
-                    child: Text(
-                      'Pontos',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
             ),
           ),
 
           const SizedBox(height: 8),
 
-          // lista de cupons
           Expanded(
             child: FutureBuilder<List<CupomModel>>(
               future: _futureCupons,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(
-                    child: CircularProgressIndicator(color: Color(0xFF6A0DAD)),
-                  );
+                  return const Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)));
                 }
 
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -297,109 +182,120 @@ class _RecompensasPageState extends State<RecompensasPage> {
 
                 final cupons = snapshot.data!;
 
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  child: ListView.separated(
-                    itemCount: cupons.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 10),
-                    itemBuilder: (context, index) {
-                      final cupom = cupons[index];
-                      return _buildCupomCard(cupom);
-                    },
-                  ),
+                // agrupa por loja
+                final Map<String, List<CupomModel>> porLoja = {};
+                for (final c in cupons) {
+                  final loja = c.nomeLoja ?? c.titulo;
+                  porLoja.putIfAbsent(loja, () => []).add(c);
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  itemCount: porLoja.length,
+                  itemBuilder: (context, index) {
+                    final loja = porLoja.keys.elementAt(index);
+                    final cuponsDaLoja = porLoja[loja]!;
+                    return _buildLojaCard(loja, cuponsDaLoja);
+                  },
                 );
               },
             ),
           ),
-
-          const SizedBox(height: 16),
         ],
       ),
     );
   }
 
-  Widget _buildCupomCard(CupomModel cupom) {
+  Widget _buildLojaCard(String nomeLoja, List<CupomModel> cupons) {
     return Container(
-      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.04),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.04), blurRadius: 4, offset: const Offset(0, 2))],
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: Text(
-                  cupom.titulo,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  '${cupom.valorDesconto.toStringAsFixed(0)}%off',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF6A0DAD),
-                  ),
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Text(
-                  '${cupom.pontosNecessarios}pts',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    color: Colors.black54,
-                  ),
-                ),
-              ),
-            ],
+          // cabeçalho da loja
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            decoration: const BoxDecoration(
+              color: Color(0xFF6A0DAD),
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.store, color: Colors.white, size: 18),
+                const SizedBox(width: 8),
+                Text(nomeLoja,
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
+              ],
+            ),
           ),
 
-          const SizedBox(height: 12),
+          // cupons da loja
+          ...cupons.map((cupom) => _buildCupomItem(cupom)),
+        ],
+      ),
+    );
+  }
 
+  Widget _buildCupomItem(CupomModel cupom) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: const BoxDecoration(
+        border: Border(bottom: BorderSide(color: Color(0xFFF0F0F0))),
+      ),
+      child: Row(
+        children: [
+          // desconto
+          Container(
+            width: 52, height: 52,
+            decoration: BoxDecoration(
+              color: const Color(0xFF6A0DAD).withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('${cupom.valorDesconto.toStringAsFixed(0)}%',
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF6A0DAD))),
+                const Text('off', style: TextStyle(fontSize: 10, color: Color(0xFF6A0DAD))),
+              ],
+            ),
+          ),
+          const SizedBox(width: 12),
+
+          // pontos necessários
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${cupom.valorDesconto.toStringAsFixed(0)}% de desconto',
+                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
+                Text('${cupom.pontosNecessarios} pontos',
+                  style: const TextStyle(color: Colors.black45, fontSize: 12)),
+              ],
+            ),
+          ),
+
+          // botão
           cupom.resgatado
               ? GestureDetector(
                   onTap: () => _mostrarCupom(cupom),
                   child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(30),
-                      border: Border.all(color: Colors.green, width: 1),
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.green),
                     ),
                     child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.check_circle, color: Colors.green, size: 16),
-                        SizedBox(width: 6),
-                        Text(
-                          'CUPOM RESGATADO',
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                            letterSpacing: 0.5,
-                          ),
-                        ),
+                        Icon(Icons.check_circle, color: Colors.green, size: 14),
+                        SizedBox(width: 4),
+                        Text('RESGATADO', style: TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.bold)),
                       ],
                     ),
                   ),
@@ -407,22 +303,13 @@ class _RecompensasPageState extends State<RecompensasPage> {
               : GestureDetector(
                   onTap: () => _resgatar(cupom),
                   child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
                       color: const Color(0xFF6A0DAD),
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(20),
                     ),
-                    child: const Text(
-                      'RESGATAR',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                        letterSpacing: 1,
-                      ),
-                    ),
+                    child: const Text('RESGATAR',
+                      style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
                   ),
                 ),
         ],
