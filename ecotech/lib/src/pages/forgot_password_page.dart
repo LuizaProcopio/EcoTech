@@ -15,7 +15,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final emailController = TextEditingController();
 
   void _enviarCodigo() async {
-    if (emailController.text.isEmpty) {
+    final email = emailController.text.trim();
+
+    if (email.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text("Por favor, digite seu e-mail!"),
@@ -26,8 +28,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     }
 
     final viewModel = context.read<ForgotPasswordViewModel>();
-
-    final sucesso = await viewModel.enviarCodigo(emailController.text);
+    final sucesso = await viewModel.enviarCodigo(email);
 
     if (sucesso && mounted) {
       Navigator.of(context).pushNamed("/verifyCode");
@@ -40,16 +41,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF6A0DAD),
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Text(
-          "EcoTech",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
+        backgroundColor: const Color(0xFF6A0DAD),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text("EcoTech",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
         centerTitle: true,
         elevation: 0,
       ),
@@ -60,28 +55,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 20),
-
-                Text(
-                  "Esqueceu sua senha?",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF6A0DAD),
-                  ),
-                ),
-
-                SizedBox(height: 10),
-
-                Text(
-                  "Digite seu e-mail para receber o código de verificação.",
-                  style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black54,
-                  ),
-                ),
-
-                SizedBox(height: 30),
+                const SizedBox(height: 20),
+                const Text("Esqueceu sua senha?",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF6A0DAD))),
+                const SizedBox(height: 10),
+                const Text("Digite seu e-mail para receber o código de verificação.",
+                  style: TextStyle(fontSize: 14, color: Colors.black54)),
+                const SizedBox(height: 30),
 
                 CampoFormularioWidget(
                   label: "E-MAIL",
@@ -89,31 +69,20 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   obscure: false,
                   icon: Icons.email,
                 ),
-
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 viewModel.isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xFF6A0DAD),
-                        ),
-                      )
-                    : ButtonAppWidget(
-                        onclick: _enviarCodigo,
-                        title: "ENVIAR CÓDIGO",
-                      ),
+                    ? const Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)))
+                    : ButtonAppWidget(onclick: _enviarCodigo, title: "ENVIAR CÓDIGO"),
 
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
 
                 Visibility(
                   visible: viewModel.erroMessage != null,
                   child: Text(
                     viewModel.erroMessage ?? '',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.redAccent,
-                      fontSize: 14,
-                    ),
+                    style: const TextStyle(color: Colors.redAccent, fontSize: 14),
                   ),
                 ),
               ],

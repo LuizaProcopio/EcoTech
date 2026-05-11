@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:ecotech/src/widgets/campo_formulario_widget.dart';
 import 'package:ecotech/src/widgets/button_app_widgets.dart';
-import '../services/user_service.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class AlterPasswordPage extends StatefulWidget {
-  const AlterPasswordPage({super.key});
+class AlterPasswordLojaPage extends StatefulWidget {
+  const AlterPasswordLojaPage({super.key});
 
   @override
-  State<AlterPasswordPage> createState() => _AlterPasswordPageState();
+  State<AlterPasswordLojaPage> createState() => _AlterPasswordLojaPageState();
 }
 
-class _AlterPasswordPageState extends State<AlterPasswordPage> {
+class _AlterPasswordLojaPageState extends State<AlterPasswordLojaPage> {
+  static const String baseUrl = "https://ecotechapi-production.up.railway.app";
+
   final senhaAtualController = TextEditingController();
   final novaSenhaController = TextEditingController();
   final confirmarSenhaController = TextEditingController();
@@ -27,22 +30,24 @@ class _AlterPasswordPageState extends State<AlterPasswordPage> {
     return null;
   }
 
-  Future<void> _alterarSenha() async {
-    if (senhaAtualController.text.isEmpty ||
-        novaSenhaController.text.isEmpty ||
-        confirmarSenhaController.text.isEmpty) {
+  Future<void> _alterarSenha(int idLoja) async {
+    // trim em todos os campos
+    final senhaAtual = senhaAtualController.text.trim();
+    final novaSenha = novaSenhaController.text.trim();
+    final confirmarSenha = confirmarSenhaController.text.trim();
+
+    if (senhaAtual.isEmpty || novaSenha.isEmpty || confirmarSenha.isEmpty) {
       setState(() => _erro = "Preencha todos os campos!");
       return;
     }
 
-    // valida senha forte
-    final erroSenha = _validarSenhaForte(novaSenhaController.text);
+    final erroSenha = _validarSenhaForte(novaSenha);
     if (erroSenha != null) {
       setState(() => _erro = erroSenha);
       return;
     }
 
-    if (novaSenhaController.text != confirmarSenhaController.text) {
+    if (novaSenha != confirmarSenha) {
       setState(() => _erro = "As senhas não coincidem!");
       return;
     }
@@ -50,23 +55,30 @@ class _AlterPasswordPageState extends State<AlterPasswordPage> {
     setState(() { _isLoading = true; _erro = null; });
 
     try {
-      final int userId = ModalRoute.of(context)!.settings.arguments as int;
-
-      await UserService.alterarSenha(
-        userId: userId,
-        senhaAtual: senhaAtualController.text,
-        novaSenha: novaSenhaController.text,
+      final response = await http.put(
+        Uri.parse("$baseUrl/lojas/$idLoja/senha"),
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode({
+          "senha_atual": senhaAtual,
+          "nova_senha": novaSenha,
+        }),
       );
 
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Senha alterada com sucesso!"),
-          backgroundColor: Colors.green,
-        ));
-        Navigator.of(context).pop();
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text("Senha alterada com sucesso!"),
+            backgroundColor: Colors.green,
+          ));
+          Navigator.of(context).pop();
+        }
+      } else {
+        setState(() => _erro = data['message'] ?? 'Erro ao alterar senha');
       }
     } catch (e) {
-      setState(() => _erro = e.toString().replaceAll('Exception: ', ''));
+      setState(() => _erro = "Erro de conexão!");
     } finally {
       if (mounted) setState(() => _isLoading = false);
     }
@@ -74,6 +86,8 @@ class _AlterPasswordPageState extends State<AlterPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final int idLoja = ModalRoute.of(context)!.settings.arguments as int;
+
     return Scaffold(
       backgroundColor: const Color(0xFFF2F2F2),
       appBar: AppBar(
@@ -95,7 +109,7 @@ class _AlterPasswordPageState extends State<AlterPasswordPage> {
             const Text('Alterar Senha',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF6A0DAD))),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
 
             // dica de senha forte
             Container(
@@ -118,7 +132,7 @@ class _AlterPasswordPageState extends State<AlterPasswordPage> {
               ),
             ),
 
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
 
             CampoFormularioWidget(
               label: "SENHA ATUAL",
@@ -162,7 +176,7 @@ class _AlterPasswordPageState extends State<AlterPasswordPage> {
 
             _isLoading
                 ? const Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)))
-                : ButtonAppWidget(onclick: _alterarSenha, title: "SALVAR"),
+                : ButtonAppWidget(onclick: () => _alterarSenha(idLoja), title: "SALVAR"),
           ],
         ),
       ),

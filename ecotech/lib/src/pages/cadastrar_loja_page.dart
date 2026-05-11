@@ -23,17 +23,35 @@ class _CadastrarLojaPageState extends State<CadastrarLojaPage> {
   bool _isLoading = false;
   String? _erro;
 
+  // valida se a senha é forte
+  String? _validarSenhaForte(String senha) {
+    if (senha.isEmpty) return "A senha é obrigatória";
+    if (senha.length <= 6) return "A senha deve ter mais de 6 caracteres";
+    if (!senha.contains(RegExp(r'[A-Z]'))) {
+      return "A senha deve conter pelo menos uma letra maiúscula";
+    }
+    return null;
+  }
+
   Future<void> _cadastrar() async {
-    if (nomeController.text.isEmpty ||
-        cnpjController.text.isEmpty ||
-        emailController.text.isEmpty ||
-        senhaController.text.isEmpty ||
-        confirmarSenhaController.text.isEmpty) {
+    final nome = nomeController.text.trim();
+    final cnpj = cnpjController.text.trim();
+    final email = emailController.text.trim();
+    final senha = senhaController.text.trim();
+    final confirmarSenha = confirmarSenhaController.text.trim();
+
+    if (nome.isEmpty || cnpj.isEmpty || email.isEmpty || senha.isEmpty || confirmarSenha.isEmpty) {
       setState(() => _erro = "Preencha todos os campos!");
       return;
     }
 
-    if (senhaController.text != confirmarSenhaController.text) {
+    final erroSenha = _validarSenhaForte(senha);
+    if (erroSenha != null) {
+      setState(() => _erro = erroSenha);
+      return;
+    }
+
+    if (senha != confirmarSenha) {
       setState(() => _erro = "As senhas não coincidem!");
       return;
     }
@@ -45,10 +63,10 @@ class _CadastrarLojaPageState extends State<CadastrarLojaPage> {
         Uri.parse("$baseUrl/lojas/cadastrar"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "nome": nomeController.text,
-          "cnpj": cnpjController.text,
-          "email": emailController.text,
-          "senha": senhaController.text,
+          "nome": nome,
+          "cnpj": cnpj,
+          "email": email,
+          "senha": senha,
         }),
       );
 
@@ -100,7 +118,30 @@ class _CadastrarLojaPageState extends State<CadastrarLojaPage> {
                 const Text("Preencha os dados da sua loja",
                   textAlign: TextAlign.center,
                   style: TextStyle(fontSize: 14, color: Colors.black54)),
-                const SizedBox(height: 24),
+                const SizedBox(height: 16),
+
+                // dica de senha forte
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF6A0DAD).withValues(alpha: 0.07),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.info_outline, color: Color(0xFF6A0DAD), size: 18),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'A senha deve ter mais de 6 caracteres e pelo menos uma letra maiúscula.',
+                          style: TextStyle(fontSize: 12, color: Color(0xFF6A0DAD)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 20),
 
                 CampoFormularioWidget(
                   label: "NOME DA EMPRESA",

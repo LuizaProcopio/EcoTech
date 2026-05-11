@@ -1,7 +1,13 @@
-// arquivo que vai compilar o app
 import 'package:ecotech/src/app_ecotech.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:ecotech/src/helpers/auth_storage.dart';
+import 'package:flutter/material.dart';
 
-void main(){
-  runApp(const AppEcotech());
+void main() async {
+  // necessário para usar async antes do runApp
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // verifica se já tem usuário logado
+  final userId = await AuthStorage.getUserId();
+
+  runApp(AppEcotech(initialUserId: userId));
 }

@@ -11,6 +11,7 @@ class CupomModel {
   final int pontosNecessarios;
   final String statusUsuario;
   final String? dataResgate;
+  final bool utilizado;
 
   CupomModel({
     required this.idCupom,
@@ -22,6 +23,7 @@ class CupomModel {
     required this.pontosNecessarios,
     required this.statusUsuario,
     this.dataResgate,
+    required this.utilizado,
   });
 
   factory CupomModel.fromJson(Map<String, dynamic> json) {
@@ -30,6 +32,10 @@ class CupomModel {
 
     final pontosRaw = json['pontos_necessarios'];
     final pontos = pontosRaw is int ? pontosRaw : int.tryParse(pontosRaw.toString()) ?? 0;
+
+    // utilizado vem como 0 ou 1 do banco
+    final utilizadoRaw = json['utilizado'];
+    final utilizado = utilizadoRaw == 1 || utilizadoRaw == true;
 
     return CupomModel(
       idCupom: json['id_cupom'] ?? 0,
@@ -41,10 +47,15 @@ class CupomModel {
       pontosNecessarios: pontos,
       statusUsuario: json['status_usuario'] ?? 'disponivel',
       dataResgate: json['data_resgate'],
+      utilizado: utilizado,
     );
   }
 
-  bool get resgatado => statusUsuario == 'resgatado';
+  // cupom foi resgatado mas ainda não foi usado pela loja
+  bool get resgatado => statusUsuario == 'resgatado' && !utilizado;
+
+  // cupom foi usado pela loja — aguardando liberação de 2 dias
+  bool get aguardandoLiberacao => utilizado == true;
 }
 
 class CupomService {

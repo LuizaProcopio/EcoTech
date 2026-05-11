@@ -217,7 +217,6 @@ class _RecompensasPageState extends State<RecompensasPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // cabeçalho da loja
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: const BoxDecoration(
@@ -233,8 +232,6 @@ class _RecompensasPageState extends State<RecompensasPage> {
               ],
             ),
           ),
-
-          // cupons da loja
           ...cupons.map((cupom) => _buildCupomItem(cupom)),
         ],
       ),
@@ -242,6 +239,9 @@ class _RecompensasPageState extends State<RecompensasPage> {
   }
 
   Widget _buildCupomItem(CupomModel cupom) {
+    // define o status visual do cupom
+    final bool aguardandoLiberacao = cupom.statusUsuario == 'utilizado';
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: const BoxDecoration(
@@ -253,66 +253,110 @@ class _RecompensasPageState extends State<RecompensasPage> {
           Container(
             width: 52, height: 52,
             decoration: BoxDecoration(
-              color: const Color(0xFF6A0DAD).withValues(alpha: 0.1),
+              color: aguardandoLiberacao
+                  ? Colors.grey.withValues(alpha: 0.15)
+                  : const Color(0xFF6A0DAD).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('${cupom.valorDesconto.toStringAsFixed(0)}%',
-                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xFF6A0DAD))),
-                const Text('off', style: TextStyle(fontSize: 10, color: Color(0xFF6A0DAD))),
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: aguardandoLiberacao ? Colors.grey : const Color(0xFF6A0DAD),
+                  )),
+                Text('off', style: TextStyle(
+                  fontSize: 10,
+                  color: aguardandoLiberacao ? Colors.grey : const Color(0xFF6A0DAD),
+                )),
               ],
             ),
           ),
           const SizedBox(width: 12),
 
-          // pontos necessários
+          // info
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('${cupom.valorDesconto.toStringAsFixed(0)}% de desconto',
-                  style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 14)),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 14,
+                    color: aguardandoLiberacao ? Colors.grey : Colors.black87,
+                  )),
                 Text('${cupom.pontosNecessarios} pontos',
                   style: const TextStyle(color: Colors.black45, fontSize: 12)),
               ],
             ),
           ),
 
-          // botão
-          cupom.resgatado
-              ? GestureDetector(
-                  onTap: () => _mostrarCupom(cupom),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.green.withValues(alpha: 0.1),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.green),
-                    ),
-                    child: const Row(
-                      children: [
-                        Icon(Icons.check_circle, color: Colors.green, size: 14),
-                        SizedBox(width: 4),
-                        Text('RESGATADO', style: TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                  ),
-                )
-              : GestureDetector(
-                  onTap: () => _resgatar(cupom),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFF6A0DAD),
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Text('RESGATAR',
-                      style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
-                  ),
-                ),
+          // botão de status
+          _buildBotaoStatus(cupom, aguardandoLiberacao),
         ],
+      ),
+    );
+  }
+
+  Widget _buildBotaoStatus(CupomModel cupom, bool aguardandoLiberacao) {
+    // aguardando liberação — loja já usou, espera 2 dias
+    if (aguardandoLiberacao) {
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.orange.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: Colors.orange),
+        ),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.hourglass_empty, color: Colors.orange, size: 14),
+            SizedBox(width: 4),
+            Text('AGUARDANDO\nLIBERAÇÃO',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.orange, fontSize: 10, fontWeight: FontWeight.bold)),
+          ],
+        ),
+      );
+    }
+
+    // resgatado — pode ver o código
+    if (cupom.resgatado) {
+      return GestureDetector(
+        onTap: () => _mostrarCupom(cupom),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+          decoration: BoxDecoration(
+            color: Colors.green.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.green),
+          ),
+          child: const Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.check_circle, color: Colors.green, size: 14),
+              SizedBox(width: 4),
+              Text('RESGATADO', style: TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.bold)),
+            ],
+          ),
+        ),
+      );
+    }
+
+    // disponível — pode resgatar
+    return GestureDetector(
+      onTap: () => _resgatar(cupom),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        decoration: BoxDecoration(
+          color: const Color(0xFF6A0DAD),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: const Text('RESGATAR',
+          style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
       ),
     );
   }

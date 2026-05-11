@@ -5,17 +5,13 @@ import 'package:ecotech/src/pages/forgot_password_page.dart';
 import 'package:ecotech/src/pages/verify_code_page.dart';
 import 'package:ecotech/src/pages/new_password_page.dart';
 import 'package:ecotech/src/pages/password_changed_page.dart';
-import 'package:ecotech/src/viewmodel/login_view_model.dart';
-import 'package:ecotech/src/viewmodel/cadastro_view_model.dart';
-import 'package:ecotech/src/viewmodel/forgot_password_view_model.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:ecotech/src/pages/user_page.dart';
 import 'package:ecotech/src/pages/disposal_registration_page.dart';
 import 'package:ecotech/src/pages/about_page.dart';
 import 'package:ecotech/src/pages/ranking_page.dart';
 import 'package:ecotech/src/pages/profile_page.dart';
 import 'package:ecotech/src/pages/alter_password_page.dart';
+import 'package:ecotech/src/pages/alter_password_loja_page.dart';
 import 'package:ecotech/src/pages/recompensas_page.dart';
 import 'package:ecotech/src/pages/suporte_page.dart';
 import 'package:ecotech/src/pages/gerenciar_lojas_page.dart';
@@ -24,9 +20,22 @@ import 'package:ecotech/src/pages/perfil_loja_page.dart';
 import 'package:ecotech/src/pages/alterar_email_page.dart';
 import 'package:ecotech/src/pages/login_loja_page.dart';
 import 'package:ecotech/src/pages/cadastrar_loja_page.dart';
+import 'package:ecotech/src/viewmodel/login_view_model.dart';
+import 'package:ecotech/src/viewmodel/cadastro_view_model.dart';
+import 'package:ecotech/src/viewmodel/forgot_password_view_model.dart';
+import 'package:ecotech/src/viewmodel/user_view_model.dart';
+import 'package:ecotech/src/viewmodel/cupom_view_model.dart';
+import 'package:ecotech/src/viewmodel/ranking_view_model.dart';
+import 'package:ecotech/src/viewmodel/descarte_view_model.dart';
+import 'package:ecotech/src/viewmodel/chat_view_model.dart';
+import 'package:ecotech/src/viewmodel/loja_view_model.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class AppEcotech extends StatelessWidget {
-  const AppEcotech({super.key});
+  final int? initialUserId;
+
+  const AppEcotech({super.key, this.initialUserId});
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +44,28 @@ class AppEcotech extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => CadastroViewModel()),
         ChangeNotifierProvider(create: (_) => ForgotPasswordViewModel()),
+        ChangeNotifierProvider(create: (_) => UserViewModel()),
+        ChangeNotifierProvider(create: (_) => CupomViewModel()),
+        ChangeNotifierProvider(create: (_) => RankingViewModel()),
+        ChangeNotifierProvider(create: (_) => DescarteViewModel()),
+        ChangeNotifierProvider(create: (_) => ChatViewModel()),
+        ChangeNotifierProvider(create: (_) => LojaViewModel()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: "AppEcotech",
+        initialRoute: initialUserId != null ? "/userPage" : "/",
+        onGenerateInitialRoutes: initialUserId != null
+            ? (route) => [
+                  MaterialPageRoute(
+                    builder: (_) => UserPage(),
+                    settings: RouteSettings(
+                      name: "/userPage",
+                      arguments: initialUserId,
+                    ),
+                  ),
+                ]
+            : null,
         routes: {
           "/": (_) => HomePage(),
           "/login": (_) => LoginPage(),
@@ -53,6 +80,7 @@ class AppEcotech extends StatelessWidget {
           "/rankingPage": (_) => RankingPage(),
           "/profilePage": (_) => ProfilePage(),
           "/alterPasswordPage": (_) => AlterPasswordPage(),
+          "/alterPasswordLojaPage": (_) => AlterPasswordLojaPage(),
           "/recompensasPage": (_) => RecompensasPage(),
           "/suportePage": (_) => SuportePage(),
           "/gerenciarLojasPage": (_) => GerenciarLojasPage(),
@@ -61,10 +89,6 @@ class AppEcotech extends StatelessWidget {
           "/alterarEmailPage": (_) => AlterarEmailPage(),
           "/loginLojaPage": (_) => const LoginLojaPage(),
           "/cadastrarLojaPage": (_) => const CadastrarLojaPage(),
-          
-
-
-          
         },
       ),
     );
