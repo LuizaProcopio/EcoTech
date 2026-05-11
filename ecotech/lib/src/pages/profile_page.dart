@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../models/user_model.dart';
 import '../services/user_service.dart';
+import '../helpers/auth_storage.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -71,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
               if (nomeController.text.isEmpty) return;
               Navigator.of(context).pop();
               try {
-                await UserService.alterarNome(user.userId, nomeController.text);
+                await UserService.alterarNome(user.userId, nomeController.text.trim());
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                     content: Text("Nome atualizado!"),
@@ -105,7 +106,13 @@ class _ProfilePageState extends State<ProfilePage> {
             onPressed: () => Navigator.of(context).pop(),
             child: const Text("Cancelar")),
           TextButton(
-            onPressed: () => Navigator.of(context).pushNamedAndRemoveUntil("/", (r) => false),
+            onPressed: () async {
+              // limpa a sessão do celular
+              await AuthStorage.limpar();
+              if (context.mounted) {
+                Navigator.of(context).pushNamedAndRemoveUntil("/", (r) => false);
+              }
+            },
             child: const Text("Sair", style: TextStyle(color: Colors.red)),
           ),
         ],

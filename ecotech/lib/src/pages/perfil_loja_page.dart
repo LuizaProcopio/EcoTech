@@ -1,100 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ecotech/src/widgets/button_app_widgets.dart';
-import 'package:ecotech/src/widgets/campo_formulario_widget.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import '../helpers/auth_storage.dart';
 
-class PerfilLojaPage extends StatefulWidget {
+class PerfilLojaPage extends StatelessWidget {
   const PerfilLojaPage({super.key});
-
-  @override
-  State<PerfilLojaPage> createState() => _PerfilLojaPageState();
-}
-
-class _PerfilLojaPageState extends State<PerfilLojaPage> {
-  static const String baseUrl = "https://ecotechapi-production.up.railway.app";
-
-  void _alterarSenha(int idLoja) {
-    final senhaAtualController = TextEditingController();
-    final novaSenhaController = TextEditingController();
-
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const Text('Alterar Senha',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 16),
-              CampoFormularioWidget(
-                label: "SENHA ATUAL",
-                controller: senhaAtualController,
-                obscure: true,
-                icon: Icons.lock_outline,
-              ),
-              const SizedBox(height: 12),
-              CampoFormularioWidget(
-                label: "NOVA SENHA",
-                controller: novaSenhaController,
-                obscure: true,
-                icon: Icons.lock,
-              ),
-              const SizedBox(height: 16),
-              ButtonAppWidget(
-                title: "SALVAR",
-                onclick: () async {
-                  Navigator.of(context).pop();
-                  try {
-                    final response = await http.put(
-                      Uri.parse("$baseUrl/lojas/$idLoja/senha"),
-                      headers: {"Content-Type": "application/json"},
-                      body: jsonEncode({
-                        "senha_atual": senhaAtualController.text,
-                        "nova_senha": novaSenhaController.text,
-                      }),
-                    );
-                    final data = jsonDecode(response.body);
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text(data['message'] ?? ''),
-                        backgroundColor: response.statusCode == 200 ? Colors.green : Colors.redAccent,
-                      ));
-                    }
-                  } catch (e) {
-                    if (mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text("Erro de conexão!"),
-                        backgroundColor: Colors.redAccent,
-                      ));
-                    }
-                  }
-                },
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pushNamed("/forgotPassword");
-                },
-                child: const Text("Esqueci minha senha",
-                  style: TextStyle(color: Colors.black54)),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +24,6 @@ class _PerfilLojaPageState extends State<PerfilLojaPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // banner
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 30),
@@ -127,25 +34,20 @@ class _PerfilLojaPageState extends State<PerfilLojaPage> {
                   bottomRight: Radius.circular(24),
                 ),
               ),
-              child: Column(
+              child: const Column(
                 children: [
-                  Container(
-                    width: 80, height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                    child: const Icon(Icons.store, color: Color(0xFF6A0DAD), size: 44),
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.white,
+                    child: Icon(Icons.store, color: Color(0xFF6A0DAD), size: 44),
                   ),
-                  const SizedBox(height: 8),
-                  const Text('Perfil da Loja',
+                  SizedBox(height: 8),
+                  Text('Perfil da Loja',
                     style: TextStyle(color: Color(0xFFD4C8F7), fontSize: 12)),
                 ],
               ),
             ),
-
             const SizedBox(height: 20),
-
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
               child: Column(
@@ -154,12 +56,10 @@ class _PerfilLojaPageState extends State<PerfilLojaPage> {
                   const Text('Informações',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87)),
                   const SizedBox(height: 12),
-
                   _buildInfoCard(Icons.store_outlined, 'Nome da Loja', nomeLoja),
                   const SizedBox(height: 8),
-
-                  // email clicável para alterar
                   _buildInfoCardEditavel(
+                    context: context,
                     icon: Icons.email_outlined,
                     label: 'E-mail',
                     value: emailLoja,
@@ -168,24 +68,27 @@ class _PerfilLojaPageState extends State<PerfilLojaPage> {
                       arguments: {'id': idLoja, 'isLoja': true},
                     ),
                   ),
-
                   const SizedBox(height: 20),
-
                   const Text('Segurança',
                     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black87)),
                   const SizedBox(height: 12),
-
                   _buildActionCard(
+                    context: context,
                     icon: Icons.lock_outline,
                     label: 'Alterar Senha',
-                    onTap: () => _alterarSenha(idLoja),
+                    onTap: () => Navigator.of(context).pushNamed(
+                      "/alterPasswordLojaPage",
+                      arguments: idLoja,
+                    ),
                   ),
-
                   const SizedBox(height: 30),
-
-                  // botão sair
                   GestureDetector(
-                    onTap: () => Navigator.of(context).pushNamedAndRemoveUntil("/", (r) => false),
+                    onTap: () async {
+                      await AuthStorage.limpar();
+                      if (context.mounted) {
+                        Navigator.of(context).pushNamedAndRemoveUntil("/", (r) => false);
+                      }
+                    },
                     child: Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(vertical: 14),
@@ -205,7 +108,6 @@ class _PerfilLojaPageState extends State<PerfilLojaPage> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 30),
                 ],
               ),
@@ -241,7 +143,7 @@ class _PerfilLojaPageState extends State<PerfilLojaPage> {
     );
   }
 
-  Widget _buildInfoCardEditavel({required IconData icon, required String label, required String value, required VoidCallback onTap}) {
+  Widget _buildInfoCardEditavel({required BuildContext context, required IconData icon, required String label, required String value, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -272,7 +174,7 @@ class _PerfilLojaPageState extends State<PerfilLojaPage> {
     );
   }
 
-  Widget _buildActionCard({required IconData icon, required String label, required VoidCallback onTap}) {
+  Widget _buildActionCard({required BuildContext context, required IconData icon, required String label, required VoidCallback onTap}) {
     return GestureDetector(
       onTap: onTap,
       child: Container(

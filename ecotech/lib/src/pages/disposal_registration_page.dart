@@ -19,6 +19,8 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
   final ImagePicker _picker = ImagePicker();
   bool _enviando = false;
   Map<String, dynamic>? _resultado;
+  bool _naoELixo = false;
+  String? _mensagemNaoLixo;
 
   // ── Lógica da Câmera ──────────────────────────────────────────────────────
 
@@ -34,6 +36,8 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
       setState(() {
         _imagemCapturada = foto;
         _resultado = null;
+        _naoELixo = false;
+        _mensagemNaoLixo = null;
       });
     }
   }
@@ -50,6 +54,8 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
       setState(() {
         _imagemCapturada = foto;
         _resultado = null;
+        _naoELixo = false;
+        _mensagemNaoLixo = null;
       });
     }
   }
@@ -70,7 +76,6 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
       final bytes = await _imagemCapturada!.readAsBytes();
       final base64 = base64Encode(bytes);
 
-      // pega o userId passado como argumento
       final int userId = ModalRoute.of(context)!.settings.arguments as int;
 
       final response = await http.post(
@@ -84,7 +89,16 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        setState(() => _resultado = data);
+
+        // verifica se é lixo ou não
+        if (data['is_lixo'] == false) {
+          setState(() {
+            _naoELixo = true;
+            _mensagemNaoLixo = data['mensagem'];
+          });
+        } else {
+          setState(() => _resultado = data);
+        }
       } else {
         final data = jsonDecode(response.body);
         if (mounted) {
@@ -110,6 +124,15 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
     }
   }
 
+  void _resetar() {
+    setState(() {
+      _imagemCapturada = null;
+      _resultado = null;
+      _naoELixo = false;
+      _mensagemNaoLixo = null;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -124,12 +147,14 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
       body: SafeArea(
         child: _resultado != null
             ? _buildResultado()
-            : Column(
-                children: [
-                  Expanded(child: _buildPreview()),
-                  _buildBottomBar(),
-                ],
-              ),
+            : _naoELixo
+                ? _buildNaoELixo()
+                : Column(
+                    children: [
+                      Expanded(child: _buildPreview()),
+                      _buildBottomBar(),
+                    ],
+                  ),
       ),
     );
   }
@@ -160,8 +185,7 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
                 height: 48,
                 decoration: const BoxDecoration(
                     color: Colors.red, shape: BoxShape.circle),
-                child:
-                    const Icon(Icons.camera_alt, color: Colors.white, size: 20),
+                child: const Icon(Icons.camera_alt, color: Colors.white, size: 20),
               ),
             ),
           ),
@@ -183,8 +207,7 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
             GestureDetector(
               onTap: _abrirCamera,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 decoration: BoxDecoration(
                   color: const Color(0xFF6A0DAD),
                   borderRadius: BorderRadius.circular(30),
@@ -203,20 +226,17 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
             GestureDetector(
               onTap: _abrirGaleria,
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
                 decoration: BoxDecoration(
                   border: Border.all(color: const Color(0xFF6A0DAD)),
                   borderRadius: BorderRadius.circular(30),
                 ),
                 child: const Row(
                   children: [
-                    Icon(Icons.photo_library,
-                        color: Color(0xFF6A0DAD), size: 18),
+                    Icon(Icons.photo_library, color: Color(0xFF6A0DAD), size: 18),
                     SizedBox(width: 8),
                     Text('Galeria',
-                        style: TextStyle(
-                            color: Color(0xFF6A0DAD), fontSize: 14)),
+                        style: TextStyle(color: Color(0xFF6A0DAD), fontSize: 14)),
                   ],
                 ),
               ),
@@ -224,6 +244,85 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
           ],
         ),
       ],
+    );
+  }
+
+  // ── Tela de Não É Lixo ─────────────────────────────────────────────────────
+
+  Widget _buildNaoELixo() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 20),
+
+          // ícone de aviso
+          Container(
+            padding: const EdgeInsets.all(20),
+            decoration: BoxDecoration(
+              color: Colors.orange.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: Colors.orange, width: 1.5),
+            ),
+            child: Column(
+              children: [
+                const Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 56),
+                const SizedBox(height: 12),
+                const Text(
+                  'Isso não parece um lixo!',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.orange,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  _mensagemNaoLixo ?? 'A imagem não parece ser um resíduo descartável. Tente novamente com uma foto de lixo.',
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    color: Colors.black54,
+                    height: 1.5,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          // aviso de pontos
+          Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              color: Colors.grey.withValues(alpha: 0.1),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: const Row(
+              children: [
+                Icon(Icons.info_outline, color: Colors.grey, size: 20),
+                SizedBox(width: 10),
+                Expanded(
+                  child: Text(
+                    'Nenhum ponto foi somado. Apenas descartes de resíduos reais são pontuados.',
+                    style: TextStyle(fontSize: 13, color: Colors.grey),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 30),
+
+          ButtonAppWidget(
+            title: 'TENTAR NOVAMENTE',
+            onclick: _resetar,
+          ),
+        ],
+      ),
     );
   }
 
@@ -235,7 +334,6 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // sucesso
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -268,49 +366,18 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
 
           const SizedBox(height: 20),
 
-          // tipo de lixo
-          _buildInfoResultado(
-            'Tipo de Lixo',
-            _resultado!['tipo_lixo'] ?? '',
-            Icons.delete_outline,
-          ),
-          _buildInfoResultado(
-            'Material',
-            _resultado!['material'] ?? '',
-            Icons.layers_outlined,
-          ),
-          _buildInfoResultado(
-            'Como Descartar',
-            _resultado!['como_descartar'] ?? '',
-            Icons.recycling,
-          ),
-          _buildInfoResultado(
-            'Tempo de Degradação',
-            _resultado!['tempo_degradacao'] ?? '',
-            Icons.access_time,
-          ),
-          _buildInfoResultado(
-            'Impacto Ambiental',
-            _resultado!['impacto_ambiental'] ?? '',
-            Icons.warning_amber_outlined,
-          ),
-          _buildInfoResultado(
-            'Curiosidade',
-            _resultado!['curiosidade'] ?? '',
-            Icons.lightbulb_outline,
-          ),
+          _buildInfoResultado('Tipo de Lixo', _resultado!['tipo_lixo'] ?? '', Icons.delete_outline),
+          _buildInfoResultado('Material', _resultado!['material'] ?? '', Icons.layers_outlined),
+          _buildInfoResultado('Como Descartar', _resultado!['como_descartar'] ?? '', Icons.recycling),
+          _buildInfoResultado('Tempo de Degradação', _resultado!['tempo_degradacao'] ?? '', Icons.access_time),
+          _buildInfoResultado('Impacto Ambiental', _resultado!['impacto_ambiental'] ?? '', Icons.warning_amber_outlined),
+          _buildInfoResultado('Curiosidade', _resultado!['curiosidade'] ?? '', Icons.lightbulb_outline),
 
           const SizedBox(height: 20),
 
-          // botão novo descarte
           ButtonAppWidget(
             title: 'NOVO DESCARTE',
-            onclick: () {
-              setState(() {
-                _imagemCapturada = null;
-                _resultado = null;
-              });
-            },
+            onclick: _resetar,
           ),
         ],
       ),
@@ -341,8 +408,7 @@ class _DisposalRegistrationPageState extends State<DisposalRegistrationPage> {
                         fontWeight: FontWeight.bold)),
                 const SizedBox(height: 2),
                 Text(valor,
-                    style: const TextStyle(
-                        fontSize: 14, color: Colors.black87)),
+                    style: const TextStyle(fontSize: 14, color: Colors.black87)),
               ],
             ),
           ),

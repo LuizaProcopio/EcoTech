@@ -15,6 +15,16 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
   final novaSenhaController = TextEditingController();
   final confirmarSenhaController = TextEditingController();
 
+  // valida se a senha é forte
+  String? _validarSenhaForte(String senha) {
+    if (senha.isEmpty) return "A nova senha é obrigatória";
+    if (senha.length <= 6) return "A senha deve ter mais de 6 caracteres";
+    if (!senha.contains(RegExp(r'[A-Z]'))) {
+      return "A senha deve conter pelo menos uma letra maiúscula";
+    }
+    return null;
+  }
+
   void _alterarSenha() async {
     if (novaSenhaController.text.isEmpty ||
         confirmarSenhaController.text.isEmpty) {
@@ -23,6 +33,15 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
           content: Text("Por favor, preencha todos os campos!"),
           backgroundColor: Colors.redAccent,
         ),
+      );
+      return;
+    }
+
+    // valida senha forte
+    final erroSenha = _validarSenhaForte(novaSenhaController.text);
+    if (erroSenha != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(erroSenha), backgroundColor: Colors.redAccent),
       );
       return;
     }
@@ -38,7 +57,6 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
     }
 
     final viewModel = context.read<ForgotPasswordViewModel>();
-
     final sucesso = await viewModel.novaSenha(novaSenhaController.text);
 
     if (sucesso && mounted) {
@@ -52,16 +70,10 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xFF6A0DAD),
-        iconTheme: IconThemeData(color: Colors.white),
-        title: Text(
-          "EcoTech",
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 22,
-          ),
-        ),
+        backgroundColor: const Color(0xFF6A0DAD),
+        iconTheme: const IconThemeData(color: Colors.white),
+        title: const Text("EcoTech",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
         centerTitle: true,
         elevation: 0,
       ),
@@ -72,18 +84,33 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
+                const Text("Digite sua nova senha",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Color(0xFF6A0DAD))),
+                const SizedBox(height: 12),
 
-                Text(
-                  "Digite sua nova senha",
-                  style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xFF6A0DAD),
+                // dica de senha forte
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF6A0DAD).withValues(alpha: 0.07),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Row(
+                    children: [
+                      Icon(Icons.info_outline, color: Color(0xFF6A0DAD), size: 18),
+                      SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'A senha deve ter mais de 6 caracteres e pelo menos uma letra maiúscula.',
+                          style: TextStyle(fontSize: 12, color: Color(0xFF6A0DAD)),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
 
-                SizedBox(height: 30),
+                const SizedBox(height: 24),
 
                 CampoFormularioWidget(
                   label: "NOVA SENHA",
@@ -91,40 +118,27 @@ class _NewPasswordPageState extends State<NewPasswordPage> {
                   obscure: true,
                   icon: Icons.lock,
                 ),
-
-                SizedBox(height: 15),
-
+                const SizedBox(height: 15),
                 CampoFormularioWidget(
                   label: "CONFIRME SUA SENHA",
                   controller: confirmarSenhaController,
                   obscure: true,
                   icon: Icons.lock_outline,
                 ),
-
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
 
                 viewModel.isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: Color(0xFF6A0DAD),
-                        ),
-                      )
-                    : ButtonAppWidget(
-                        onclick: _alterarSenha,
-                        title: "ALTERAR SUA SENHA",
-                      ),
+                    ? const Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)))
+                    : ButtonAppWidget(onclick: _alterarSenha, title: "ALTERAR SUA SENHA"),
 
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
 
                 Visibility(
                   visible: viewModel.erroMessage != null,
                   child: Text(
                     viewModel.erroMessage ?? '',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.redAccent,
-                      fontSize: 14,
-                    ),
+                    style: const TextStyle(color: Colors.redAccent, fontSize: 14),
                   ),
                 ),
               ],

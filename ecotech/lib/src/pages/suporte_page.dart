@@ -17,7 +17,6 @@ class _SuportePageState extends State<SuportePage> {
   @override
   void initState() {
     super.initState();
-    // mensagem de boas vindas
     _mensagens.add(ChatMessage(
       text: 'Olá! Sou o assistente virtual do EcoTech. Posso te ajudar com dúvidas sobre reciclagem e sobre o aplicativo. Como posso te ajudar?',
       isUser: false,
@@ -78,6 +77,8 @@ class _SuportePageState extends State<SuportePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // resizeToAvoidBottomInset garante que o layout sobe com o teclado
+      resizeToAvoidBottomInset: true,
       backgroundColor: const Color(0xFFF2F2F2),
       appBar: AppBar(
         backgroundColor: const Color(0xFF6A0DAD),
@@ -114,94 +115,102 @@ class _SuportePageState extends State<SuportePage> {
         ),
         elevation: 0,
       ),
-      body: Column(
-        children: [
-          // lista de mensagens
-          Expanded(
-            child: ListView.builder(
-              controller: _scrollController,
-              padding: const EdgeInsets.all(16),
-              itemCount: _mensagens.length,
-              itemBuilder: (context, index) {
-                final msg = _mensagens[index];
-                return _buildMensagem(msg);
-              },
+      body: SafeArea(
+        child: Column(
+          children: [
+            // lista de mensagens
+            Expanded(
+              child: ListView.builder(
+                controller: _scrollController,
+                padding: const EdgeInsets.all(16),
+                itemCount: _mensagens.length,
+                itemBuilder: (context, index) {
+                  final msg = _mensagens[index];
+                  return _buildMensagem(msg);
+                },
+              ),
             ),
-          ),
 
-          // indicador de digitando
-          if (_enviando)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            // indicador de digitando
+            if (_enviando)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+                child: Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: const Row(
+                        children: [
+                          SizedBox(
+                            width: 40,
+                            child: LinearProgressIndicator(
+                              color: Color(0xFF6A0DAD),
+                              backgroundColor: Color(0xFFE0D4F5),
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          Text('digitando...',
+                              style: TextStyle(color: Colors.black45, fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+            // campo de texto — agora usando bottomInset do teclado corretamente
+            Container(
+              padding: EdgeInsets.fromLTRB(
+                16,
+                8,
+                16,
+                // adiciona o espaço do teclado + padding base
+                MediaQuery.of(context).viewInsets.bottom > 0 ? 8 : 16,
+              ),
+              color: Colors.white,
               child: Row(
                 children: [
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    child: const Row(
-                      children: [
-                        SizedBox(
-                          width: 40,
-                          child: LinearProgressIndicator(
-                            color: Color(0xFF6A0DAD),
-                            backgroundColor: Color(0xFFE0D4F5),
-                          ),
+                  Expanded(
+                    child: TextField(
+                      controller: _controller,
+                      onSubmitted: (_) => _enviar(),
+                      textInputAction: TextInputAction.send,
+                      decoration: InputDecoration(
+                        hintText: 'Digite sua dúvida...',
+                        hintStyle: const TextStyle(color: Colors.black38),
+                        filled: true,
+                        fillColor: const Color(0xFFF2F2F2),
+                        contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 10),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(24),
+                          borderSide: BorderSide.none,
                         ),
-                        SizedBox(width: 8),
-                        Text('digitando...',
-                            style: TextStyle(color: Colors.black45, fontSize: 12)),
-                      ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  GestureDetector(
+                    onTap: _enviar,
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFF6A0DAD),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.send, color: Colors.white, size: 20),
                     ),
                   ),
                 ],
               ),
             ),
-
-          // campo de texto
-          Container(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-            color: Colors.white,
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    onSubmitted: (_) => _enviar(),
-                    textInputAction: TextInputAction.send,
-                    decoration: InputDecoration(
-                      hintText: 'Digite sua dúvida...',
-                      hintStyle: const TextStyle(color: Colors.black38),
-                      filled: true,
-                      fillColor: const Color(0xFFF2F2F2),
-                      contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 10),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(24),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                GestureDetector(
-                  onTap: _enviar,
-                  child: Container(
-                    width: 44,
-                    height: 44,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFF6A0DAD),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(Icons.send, color: Colors.white, size: 20),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

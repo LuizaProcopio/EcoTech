@@ -20,7 +20,10 @@ class _LoginLojaPageState extends State<LoginLojaPage> {
   String? _erro;
 
   Future<void> _login() async {
-    if (emailController.text.isEmpty || senhaController.text.isEmpty) {
+    final email = emailController.text.trim();
+    final senha = senhaController.text.trim();
+
+    if (email.isEmpty || senha.isEmpty) {
       setState(() => _erro = "Preencha todos os campos!");
       return;
     }
@@ -32,8 +35,8 @@ class _LoginLojaPageState extends State<LoginLojaPage> {
         Uri.parse("$baseUrl/lojas/login"),
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
-          "email": emailController.text,
-          "senha": senhaController.text,
+          "email": email,
+          "senha": senha,
         }),
       );
 
@@ -46,7 +49,7 @@ class _LoginLojaPageState extends State<LoginLojaPage> {
             arguments: {
               'idLoja': data['id_loja'],
               'nomeLoja': data['nome_loja'],
-              'emailLoja': emailController.text,
+              'emailLoja': email,
             },
           );
         }
@@ -104,7 +107,6 @@ class _LoginLojaPageState extends State<LoginLojaPage> {
                   icon: Icons.lock,
                 ),
 
-                // esqueci minha senha
                 Align(
                   alignment: Alignment.centerRight,
                   child: TextButton(
@@ -130,7 +132,6 @@ class _LoginLojaPageState extends State<LoginLojaPage> {
 
                 const SizedBox(height: 20),
 
-                // cadastrar loja
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

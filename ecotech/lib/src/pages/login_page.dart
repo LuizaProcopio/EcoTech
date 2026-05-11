@@ -19,8 +19,8 @@ class _LoginPageState extends State<LoginPage> {
     final viewModel = context.read<LoginViewModel>();
 
     final user = await viewModel.login(
-      emailController.text,
-      passWordController.text,
+      emailController.text.trim(),
+      passWordController.text.trim(),
     );
 
     if (user != null && mounted) {
@@ -111,8 +111,6 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-
-                // divisor
                 Row(
                   children: [
                     const Expanded(child: Divider()),
@@ -124,8 +122,6 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 const SizedBox(height: 20),
-
-                // botão lojista
                 GestureDetector(
                   onTap: () => Navigator.of(context).pushNamed("/loginLojaPage"),
                   child: Container(
