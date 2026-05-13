@@ -43,7 +43,6 @@ class _RecompensasPageState extends State<RecompensasPage> {
         idUsuario: _userId,
         idCupom: cupom.idCupom,
       );
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -51,35 +50,7 @@ class _RecompensasPageState extends State<RecompensasPage> {
             backgroundColor: Colors.green,
           ),
         );
-        await _carregarCupons(); // atualiza automaticamente
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(e.toString().replaceAll('Exception: ', '')),
-            backgroundColor: Colors.redAccent,
-          ),
-        );
-      }
-    }
-  }
-
-  Future<void> _utilizarCupom(CupomModel cupom) async {
-    try {
-      await CupomService.utilizarCupom(
-        idUsuario: _userId,
-        idCupom: cupom.idCupom,
-      );
-      if (mounted) {
-        Navigator.pop(context); // fecha o modal
-        await _carregarCupons(); // atualiza a lista
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Cupom utilizado! Disponível novamente em 2 dias.'),
-            backgroundColor: Colors.orange,
-          ),
-        );
+        await _carregarCupons();
       }
     } catch (e) {
       if (mounted) {
@@ -110,10 +81,7 @@ class _RecompensasPageState extends State<RecompensasPage> {
           children: [
             Container(
               width: 40, height: 4,
-              decoration: BoxDecoration(
-                color: Colors.black12,
-                borderRadius: BorderRadius.circular(2),
-              ),
+              decoration: BoxDecoration(color: Colors.black12, borderRadius: BorderRadius.circular(2)),
             ),
             const SizedBox(height: 20),
             Container(
@@ -149,10 +117,8 @@ class _RecompensasPageState extends State<RecompensasPage> {
                   const SizedBox(height: 4),
                   Text(codigo,
                     style: const TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF6A0DAD),
-                      letterSpacing: 4,
+                      fontSize: 26, fontWeight: FontWeight.bold,
+                      color: Color(0xFF6A0DAD), letterSpacing: 4,
                     )),
                 ],
               ),
@@ -165,21 +131,6 @@ class _RecompensasPageState extends State<RecompensasPage> {
             const Text('Válido por 2 dias após o resgate.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: Colors.redAccent, fontStyle: FontStyle.italic)),
-            const SizedBox(height: 16),
-            // botão já usei
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: () => _utilizarCupom(cupom),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                ),
-                child: const Text('JÁ USEI ESTE CUPOM',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
-              ),
-            ),
             const SizedBox(height: 20),
           ],
         ),
@@ -207,9 +158,7 @@ class _RecompensasPageState extends State<RecompensasPage> {
             decoration: const BoxDecoration(
               color: Color(0xFF6A0DAD),
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(24),
-                bottomRight: Radius.circular(24),
-              ),
+                bottomLeft: Radius.circular(24), bottomRight: Radius.circular(24)),
             ),
             child: const Column(
               children: [
@@ -223,9 +172,7 @@ class _RecompensasPageState extends State<RecompensasPage> {
               ],
             ),
           ),
-
           const SizedBox(height: 8),
-
           Expanded(
             child: _carregando
               ? const Center(child: CircularProgressIndicator(color: Color(0xFF6A0DAD)))
@@ -267,8 +214,7 @@ class _RecompensasPageState extends State<RecompensasPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [BoxShadow(
           color: Colors.black.withValues(alpha: 0.04),
-          blurRadius: 4,
-          offset: const Offset(0, 2),
+          blurRadius: 4, offset: const Offset(0, 2),
         )],
       ),
       child: Column(
@@ -279,20 +225,14 @@ class _RecompensasPageState extends State<RecompensasPage> {
             decoration: const BoxDecoration(
               color: Color(0xFF6A0DAD),
               borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-              ),
+                topLeft: Radius.circular(12), topRight: Radius.circular(12)),
             ),
             child: Row(
               children: [
                 const Icon(Icons.store, color: Colors.white, size: 18),
                 const SizedBox(width: 8),
                 Text(nomeLoja,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  )),
+                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15)),
               ],
             ),
           ),
@@ -303,8 +243,6 @@ class _RecompensasPageState extends State<RecompensasPage> {
   }
 
   Widget _buildCupomItem(CupomModel cupom) {
-    final bool aguardandoLiberacao = cupom.aguardandoLiberacao;
-
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: const BoxDecoration(
@@ -315,7 +253,7 @@ class _RecompensasPageState extends State<RecompensasPage> {
           Container(
             width: 52, height: 52,
             decoration: BoxDecoration(
-              color: aguardandoLiberacao
+              color: cupom.utilizado
                 ? Colors.grey.withValues(alpha: 0.15)
                 : const Color(0xFF6A0DAD).withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
@@ -325,13 +263,12 @@ class _RecompensasPageState extends State<RecompensasPage> {
               children: [
                 Text('${cupom.valorDesconto.toStringAsFixed(0)}%',
                   style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: aguardandoLiberacao ? Colors.grey : const Color(0xFF6A0DAD),
+                    fontSize: 16, fontWeight: FontWeight.bold,
+                    color: cupom.utilizado ? Colors.grey : const Color(0xFF6A0DAD),
                   )),
                 Text('off', style: TextStyle(
                   fontSize: 10,
-                  color: aguardandoLiberacao ? Colors.grey : const Color(0xFF6A0DAD),
+                  color: cupom.utilizado ? Colors.grey : const Color(0xFF6A0DAD),
                 )),
               ],
             ),
@@ -343,47 +280,43 @@ class _RecompensasPageState extends State<RecompensasPage> {
               children: [
                 Text('${cupom.valorDesconto.toStringAsFixed(0)}% de desconto',
                   style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14,
-                    color: aguardandoLiberacao ? Colors.grey : Colors.black87,
+                    fontWeight: FontWeight.w500, fontSize: 14,
+                    color: cupom.utilizado ? Colors.grey : Colors.black87,
                   )),
                 Text('${cupom.pontosNecessarios} pontos',
                   style: const TextStyle(color: Colors.black45, fontSize: 12)),
               ],
             ),
           ),
-          _buildBotaoStatus(cupom, aguardandoLiberacao),
+          _buildBotaoStatus(cupom),
         ],
       ),
     );
   }
 
-  Widget _buildBotaoStatus(CupomModel cupom, bool aguardandoLiberacao) {
-    if (aguardandoLiberacao) {
+  Widget _buildBotaoStatus(CupomModel cupom) {
+    // utilizado pela loja — aguarda 2 dias para liberar
+    if (cupom.utilizado) {
       return Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.orange.withValues(alpha: 0.1),
+          color: Colors.grey.withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: Colors.orange),
+          border: Border.all(color: Colors.grey),
         ),
         child: const Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.hourglass_empty, color: Colors.orange, size: 14),
+            Icon(Icons.check_circle_outline, color: Colors.grey, size: 14),
             SizedBox(width: 4),
-            Text('AGUARDANDO\nLIBERAÇÃO',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.orange,
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-              )),
+            Text('UTILIZADO',
+              style: TextStyle(color: Colors.grey, fontSize: 11, fontWeight: FontWeight.bold)),
           ],
         ),
       );
     }
 
+    // resgatado — pode ver o código
     if (cupom.resgatado) {
       return GestureDetector(
         onTap: () => _mostrarCupom(cupom),
@@ -400,17 +333,14 @@ class _RecompensasPageState extends State<RecompensasPage> {
               Icon(Icons.check_circle, color: Colors.green, size: 14),
               SizedBox(width: 4),
               Text('RESGATADO',
-                style: TextStyle(
-                  color: Colors.green,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
-                )),
+                style: TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.bold)),
             ],
           ),
         ),
       );
     }
 
+    // disponível — pode resgatar
     return GestureDetector(
       onTap: () => _resgatar(cupom),
       child: Container(
@@ -420,11 +350,7 @@ class _RecompensasPageState extends State<RecompensasPage> {
           borderRadius: BorderRadius.circular(20),
         ),
         child: const Text('RESGATAR',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 11,
-            fontWeight: FontWeight.bold,
-          )),
+          style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
       ),
     );
   }
