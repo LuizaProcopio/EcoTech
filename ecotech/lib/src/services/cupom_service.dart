@@ -33,7 +33,6 @@ class CupomModel {
     final pontosRaw = json['pontos_necessarios'];
     final pontos = pontosRaw is int ? pontosRaw : int.tryParse(pontosRaw.toString()) ?? 0;
 
-    // utilizado vem como 0 ou 1 do banco
     final utilizadoRaw = json['utilizado'];
     final utilizado = utilizadoRaw == 1 || utilizadoRaw == true;
 
@@ -51,11 +50,8 @@ class CupomModel {
     );
   }
 
-  // cupom foi resgatado mas ainda não foi usado pela loja
   bool get resgatado => statusUsuario == 'resgatado' && !utilizado;
-
-  // cupom foi usado pela loja — aguardando liberação de 2 dias
-  bool get aguardandoLiberacao => utilizado == true;
+  bool get aguardandoLiberacao => statusUsuario == 'utilizado';
 }
 
 class CupomService {
@@ -91,6 +87,24 @@ class CupomService {
       return data;
     } else {
       throw Exception(data['message'] ?? 'Erro ao resgatar cupom');
+    }
+  }
+
+  static Future<void> utilizarCupom({
+    required int idUsuario,
+    required int idCupom,
+  }) async {
+    final url = Uri.parse("$baseUrl/cupons/utilizar");
+
+    final response = await http.post(
+      url,
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"id_usuario": idUsuario, "id_cupom": idCupom}),
+    );
+
+    if (response.statusCode != 200) {
+      final data = jsonDecode(response.body);
+      throw Exception(data['message'] ?? 'Erro ao utilizar cupom');
     }
   }
 }
