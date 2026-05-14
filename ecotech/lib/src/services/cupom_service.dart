@@ -28,10 +28,14 @@ class CupomModel {
 
   factory CupomModel.fromJson(Map<String, dynamic> json) {
     final valorRaw = json['valor_desconto'];
-    final valor = valorRaw is double ? valorRaw : double.tryParse(valorRaw.toString()) ?? 0.0;
+    final valor = valorRaw is double
+        ? valorRaw
+        : double.tryParse(valorRaw.toString()) ?? 0.0;
 
     final pontosRaw = json['pontos_necessarios'];
-    final pontos = pontosRaw is int ? pontosRaw : int.tryParse(pontosRaw.toString()) ?? 0;
+    final pontos = pontosRaw is int
+        ? pontosRaw
+        : int.tryParse(pontosRaw.toString()) ?? 0;
 
     final utilizadoRaw = json['utilizado'];
     final utilizado = utilizadoRaw == 1 || utilizadoRaw == true;
