@@ -28,10 +28,14 @@ class CupomModel {
 
   factory CupomModel.fromJson(Map<String, dynamic> json) {
     final valorRaw = json['valor_desconto'];
-    final valor = valorRaw is double ? valorRaw : double.tryParse(valorRaw.toString()) ?? 0.0;
+    final valor = valorRaw is double
+        ? valorRaw
+        : double.tryParse(valorRaw.toString()) ?? 0.0;
 
     final pontosRaw = json['pontos_necessarios'];
-    final pontos = pontosRaw is int ? pontosRaw : int.tryParse(pontosRaw.toString()) ?? 0;
+    final pontos = pontosRaw is int
+        ? pontosRaw
+        : int.tryParse(pontosRaw.toString()) ?? 0;
 
     final utilizadoRaw = json['utilizado'];
     final utilizado = utilizadoRaw == 1 || utilizadoRaw == true;
@@ -50,7 +54,10 @@ class CupomModel {
     );
   }
 
+  // resgatado mas ainda não utilizado pela loja
   bool get resgatado => statusUsuario == 'resgatado' && !utilizado;
+
+  // utilizado pela loja — aguarda 2 dias para liberar
   bool get aguardandoLiberacao => statusUsuario == 'utilizado';
 }
 
@@ -87,24 +94,6 @@ class CupomService {
       return data;
     } else {
       throw Exception(data['message'] ?? 'Erro ao resgatar cupom');
-    }
-  }
-
-  static Future<void> utilizarCupom({
-    required int idUsuario,
-    required int idCupom,
-  }) async {
-    final url = Uri.parse("$baseUrl/cupons/utilizar");
-
-    final response = await http.post(
-      url,
-      headers: {"Content-Type": "application/json"},
-      body: jsonEncode({"id_usuario": idUsuario, "id_cupom": idCupom}),
-    );
-
-    if (response.statusCode != 200) {
-      final data = jsonDecode(response.body);
-      throw Exception(data['message'] ?? 'Erro ao utilizar cupom');
     }
   }
 }
